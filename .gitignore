@@ -192,3 +192,24 @@ FakesAssemblies/
 
 # Windows system files
 [Tt]humbs.db
+
+*.o
+.idea
+
+### Output and Cache Directories ###
+/External/
+/Debug/
+/Docs/
+/Release/
+/build/
+/build*/
+/bin/
+/out/
+/cmake-build-*/
+
+### CMake ###
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+cmake_install.cmake
+install_manifest.txt

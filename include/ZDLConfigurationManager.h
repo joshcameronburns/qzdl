@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _configurationManger_h_
-#define _configurationManger_h_
+#pragma once
 
 #include <QComboBox>
 #include <QValidator>
@@ -26,15 +25,13 @@
 #include "ZDLConfiguration.h"
 #include "zdlcommon.h"
 
-class ZDLConfigurationEvents;
-
 class ZDLConfigurationManager{
 	public:
 		enum WhyConfig {UNKNOWN, USER_SPECIFIED, USER_CONF, IN_EXEC_DIR, IN_CWD};
 		static void init();
 		static ZDLWidget* getInterface();
 		static void setInterface(ZDLWidget *widget);
-		static void setWhy(WhyConfig conf);		
+		static void setWhy(WhyConfig whyConfig);		
 		static WhyConfig getWhy();	
 
 		// Deprecating this soon!
@@ -56,32 +53,32 @@ class ZDLConfigurationManager{
 		static QString exec;
 		static QStringList argv;
 		static QString filename;
-		static ZDLWidget* interface;
+		static ZDLWidget* zinterface;
 		static ZDLConf *activeConfig;
 		static QString cdir;
 		static ZDLConfiguration *conf;
 		static WhyConfig why;
 };
 
-QString getLastDir(ZDLConf *zconf=NULL);
-void saveLastDir(QString fileName, ZDLConf *zconf=NULL);
-QString getWadLastDir(ZDLConf *zconf=NULL, bool dwd_first=false);
-void saveWadLastDir(QString fileName, ZDLConf *zconf=NULL, bool is_dir=false);
-QString getSrcLastDir(ZDLConf *zconf=NULL);
-void saveSrcLastDir(QString fileName, ZDLConf *zconf=NULL);
-QString getSaveLastDir(ZDLConf *zconf=NULL);
-void saveSaveLastDir(QString fileName, ZDLConf *zconf=NULL);
-QString getZdlLastDir(ZDLConf *zconf=NULL);
-void saveZdlLastDir(QString fileName, ZDLConf *zconf=NULL);
-QString getIniLastDir(ZDLConf *zconf=NULL);
-void saveIniLastDir(QString fileName, ZDLConf *zconf=NULL);
+QString getLastDir(ZDLConf *zconf=nullptr);
+void saveLastDir(const QString& fileName, ZDLConf *zconf=nullptr);
+QString getWadLastDir(ZDLConf *zconf=nullptr, bool dwd_first=false);
+void saveWadLastDir(const QString& fileName, ZDLConf *zconf=nullptr, bool is_dir=false);
+QString getSrcLastDir(ZDLConf *zconf=nullptr);
+void saveSrcLastDir(const QString& fileName, ZDLConf *zconf=nullptr);
+QString getSaveLastDir(ZDLConf *zconf=nullptr);
+void saveSaveLastDir(const QString& fileName, ZDLConf *zconf=nullptr);
+QString getZdlLastDir(ZDLConf *zconf=nullptr);
+void saveZdlLastDir(const QString& fileName, ZDLConf *zconf=nullptr);
+QString getIniLastDir(ZDLConf *zconf=nullptr);
+void saveIniLastDir(const QString& fileName, ZDLConf *zconf=nullptr);
 
 class VerboseComboBox: public QComboBox {
 	Q_OBJECT
 public:
-	VerboseComboBox(QWidget *parent=NULL): QComboBox(parent) {}
-	virtual void showPopup();
-	virtual void hidePopup();
+	explicit VerboseComboBox(QWidget *parent=nullptr): QComboBox(parent) {}
+	void showPopup() override;
+	void hidePopup() override;
 signals:
 	void onPopup();
 	void onHidePopup();
@@ -90,8 +87,6 @@ signals:
 class EvilValidator: public QValidator {
 	Q_OBJECT
 public:
-	EvilValidator(QObject *parent): QValidator(parent) {}
-	virtual QValidator::State validate(QString &input, int &pos) const;
+	explicit EvilValidator(QObject *parent): QValidator(parent) {}
+	QValidator::State validate(QString &input, int &pos) const override;
 };
-
-#endif

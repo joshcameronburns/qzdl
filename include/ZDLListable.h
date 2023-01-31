@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,22 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZLISTABLE_H_
-#define _ZLISTABLE_H_
+#pragma once
 
 #include <QListWidgetItem>
 #include <QObject>
 
-class ZDLListable: public QObject, public QListWidgetItem{
-	Q_OBJECT
-public:
+class ZDLListable : public QObject, public QListWidgetItem
+{
+ Q_OBJECT
+ public:
 	virtual QString getName();
-	ZDLListable( QListWidget * parent, int type);
-	virtual void setName(QString inName);
-protected:
+	ZDLListable(QListWidget* parent, int type);
+	virtual void setName(const QString& inName);
+ protected:
 	int myType;
 };
-
-#endif
-

@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,44 +17,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+#pragma once
+
 #include <QtGui>
 #include <QObject>
+#include <QListWidget>
+#include <QComboBox>
+#include <QItemDelegate>
 #include <QStyledItemDelegate>
 #include "ZDLWidget.h"
 
-class ZDLSettingsPane: public ZDLWidget {
-	Q_OBJECT
-public: 
-	ZDLSettingsPane( QWidget *parent=0);
-	virtual void rebuild();
-	virtual void newConfig();
-protected slots:
+class ZDLSettingsPane : public ZDLWidget
+{
+ Q_OBJECT
+ public:
+	explicit ZDLSettingsPane(QWidget* parent = nullptr);
+	void rebuild() override;
+	void newConfig() override;
+ protected slots:
 	void currentRowChanged(int);
 	void reloadMapList();
 	void VerbosePopup();
 	void HidePopup();
-protected:
-	QStringList getFilesMaps();
-	QComboBox *diffList;
-	QComboBox *sourceList;
-	QListWidget *IWADList;
-	QComboBox *warpCombo;
-	static bool naturalSortLess(const QString &lm, const QString &rm);
+ protected:
+	static QStringList getFilesMaps();
+	QComboBox* diffList;
+	QComboBox* sourceList;
+	QListWidget* IWADList;
+	QComboBox* warpCombo;
+	static bool naturalSortLess(const QString& lm, const QString& rm);
 };
 
-class AlwaysFocusedDelegate: public QItemDelegate {
-	Q_OBJECT
-public:
-	AlwaysFocusedDelegate(QObject *parent=NULL): QItemDelegate(parent) {}
-	virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	//virtual void drawFocus(QPainter*, const QStyleOptionViewItem&, const QRect&) const {}
+class AlwaysFocusedDelegate : public QItemDelegate
+{
+ Q_OBJECT
+ public:
+	explicit AlwaysFocusedDelegate(QObject* parent = nullptr) : QItemDelegate(parent){}
+	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 };
 
-class DeselectableListWidget: public QListWidget {
-	Q_OBJECT
-public:
-	DeselectableListWidget(QWidget *parent=NULL): QListWidget(parent) {}
-	virtual void mousePressEvent(QMouseEvent *event);
+class DeselectableListWidget : public QListWidget
+{
+ Q_OBJECT
+ public:
+	explicit DeselectableListWidget(QWidget* parent = nullptr) : QListWidget(parent){}
+	void mousePressEvent(QMouseEvent* event) override;
 };
 

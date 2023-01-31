@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2012  Cody Harris
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _ZDLMAPFILE_HPP_
-#define _ZDLMAPFILE_HPP_
+#pragma once
 
 #include <QtCore>
 
-class ZDLMapFile{
-	public:
-		static ZDLMapFile *getMapFile(QString file);
-		virtual QString getIwadinfoName() = 0;
-		virtual QStringList getMapNames() = 0;
-		virtual bool isMAPXX() = 0;
-		virtual ~ZDLMapFile() = 0;
+class ZDLMapFile
+{
+ public:
+	static ZDLMapFile* getMapFile(const QString& file);
+	virtual QString getIwadinfoName() = 0;
+	virtual QStringList getMapNames() = 0;
+	virtual bool isMAPXX() = 0;
+	virtual ~ZDLMapFile() = 0;
 };
-
-
-#endif
-
-
-

@@ -2,6 +2,7 @@ ZDL compiling instructions
 
 1. License
 ----------
+Copyright (c) 2023 spacebub
 Copyright (c) 2018-2019 Lcferrum
 Copyright (c) 2004-2012 ZDL Software Foundation
 
@@ -18,57 +19,73 @@ LICENSE files for details.
 
 2. General
 ----------
-ZDL is written in C++ and uses Qt 4.8 framework. To be able to compile ZDL you
-should install Qt 4.8 SDK. ZDL also uses SimpleWFA and miniz libraries which
-are statically linked and included with the sources. Sources can be downloaded
-from official GitHub page:
+ZDL is written in C++ and uses Qt 6 framework. To be able to compile ZDL you
+should install Qt 6 SDK and CMake. ZDL also uses SimpleWFA and miniz libraries
+which are statically linked and included with the sources. Sources can be 
+downloaded from official GitHub page:
 
-	https://github.com/lcferrum/qzdl
+	https://github.com/spacebub/qzdl
 	
 After compiling, see README file for instructions on using ZDL.
 
 3. Compile for Windows
 ----------------------
-ZDL source code includes Microsoft Visual Studio 2010 solution that should be
-used to compile ZDL on Windows. Besides VS 2010, to compile ZDL you need to
-install:
+Create a build directory in the repository root, enter it then configure with CMake:
 
-    1) Qt 4.8 for Microsoft Visual Studio 2010
+	mkdir build
+	cd build
+	cmake .. -G "{Your VS version}" -DCMAKE_PREFIX_PATH="{Path to qt installation}" -DCMAKE_CXX_FLAGS="/MP"
 
-    2) Qt Visual Studio Add-in
-	
-Note that you can also use versions of VS greater than 2010 (there is a
-backward compatibility with solutions from previous versions), but official VS
-Qt 4.8 distributions support only 2008 and 2010 versions. Also, official VS
-Qt 4.8 distributions support only x86 architecture. For versions of VS greater
-than 2010 or for x86-64 architecture, Qt 4.8 should be compiled from the
-sources. Official VS 2010 distribution of Qt 4.8 is compiled for dynamic
-linking. If you want ZDL to be compiled as standalone executable, you have to
-recompile Qt with static linking support and select 'Release (Static)'
-configuration in VS solution. After setting up build environment and selecting
-proper build configuration, don't forget to set correct VS solution Qt version.
+Note that without -DCMAKE_CXX_FLAGS="/MP" the build will be single threaded and 
+very slow. To know which version to pass to -G you can consult:
 
-Also note that there is a Qt Creator project distributed with ZDL sources, but
-it's not intended to be used to compile ZDL on Windows. Though it can be used
-in such role after some modifications to the source code and project itself.
+	https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html#visual-studio-generators
+
+After the build is complete and you have a qzdl.exe file, assuming you have
+the correct Qt directory registered in your PATH:
+
+	windeployqt --release .\qzdl.exe
+
+This will copy over the required Dlls.
+
+3.1 Static Compilation on Windows
+---------------------------------
+For a static windows build you need to link with a static build of qtbase.
+The easiest way to do this is through vcpkg. The following is an example
+for 64 bit builds:
+
+  VCPKG:
+	git clone https://github.com/Microsoft/vcpkg.git  (in a suitable dir)
+	cd vcpkg
+	.\bootstrap-vcpkg.bat
+	.\vcpkg install qtbase:x64-windows-static
+  
+  BUILD:
+	enter the qzdl repository root where you cloned the project
+	mkdir build
+    cd build
+    cmake .. -G "Visual Studio 17 2022" \
+    -A x64 \
+    -DCMAKE_TOOLCHAIN_FILE="{vcpkg directory from previous step}\scripts\buildsystems\vcpkg.cmake" \
+    -DCMAKE_CXX_FLAGS="/MT" \
+    -DVCPKG_TARGET_TRIPLET=x64-windows-static
+    
+Note that if the /MT flag is not set correctly you can do so manually
+by right clicking the project in solution explorer then Properties > 
+C/C++ > Code Generation and changing the Runtime Library property.
+This is needed for static linking.
 
 4. Compile for Linux
 --------------------
-ZDL source code includes Qt Creator project that should be used to compile ZDL
-on Linux. Project is optimized for GNU C++ compiler, other compilers may 
-require some modifications to be made. Besides C++ compiler, to compile ZDL you
-need to install:
+CMake by default will generate the necessary makefile:
 
-    1) Qt 4.8 toolchain
-
-    2) Qt Creator
-	
-All these should be readily available for your selected Linux distro via it's
-package manager. Actual package names of needed components differ between Linux
-distros. If your Linux distro provides only generic "Qt 4" toolchain package(s),
-make sure that it is 4.8 version of Qt toolchain. If not, Qt 4.8 should be
-compiled from the sources. Usually, Qt toolchain provided via package manager
-supports only dynamic linking. If you want ZDL to be compiled as standalone
-executable, you have to recompile Qt with static linking support and supply
-'CONFIG+=static' as additional argument to qmake in Qt Creator build settings
-for ZDL project.
+	mkdir build
+    cd build
+    cmake ..
+    make -j$(nproc --all)
+    
+4.1 Static Compilation on Linux
+-------------------------------
+You will have to manually build a static version of qtbase and then
+link to it during compilation.
+    

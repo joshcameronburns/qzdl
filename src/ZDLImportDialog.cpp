@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2012  Cody Harris
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QDialogButtonBox>
 #include "ZDLImportDialog.h"
-#include "zdlcommon.h"
 
-ZDLImportDialog::ZDLImportDialog(QWidget *parent):QDialog(parent){
-	QVBoxLayout *layout = new QVBoxLayout(this);
+ZDLImportDialog::ZDLImportDialog(QWidget* parent) : QDialog(parent)
+{
+	auto* layout = new QVBoxLayout(this);
 	this->setLayout(layout);
 	setWindowTitle("Configuration Import");
 
@@ -36,14 +40,14 @@ ZDLImportDialog::ZDLImportDialog(QWidget *parent):QDialog(parent){
 	preamble += "- Do not import the current .INI and ask again for another\n";
 	preamble += "- Never import and never ask this question again\n";
 	preamble += "- Ask again later, do nothing now";
-	QLabel *walloftext = new QLabel(preamble, this);
-	walloftext->setWordWrap(true);	
+	auto* walloftext = new QLabel(preamble, this);
+	walloftext->setWordWrap(true);
 	layout->addWidget(walloftext);
-	QDialogButtonBox *btnGrp = new QDialogButtonBox(this);
-	QPushButton *importNow = new QPushButton("Import Now", this);
-	QPushButton *notThis = new QPushButton("Don't import this", this);
-	QPushButton *noImport = new QPushButton("Never import", this);
-	QPushButton *askLater = new QPushButton("Ask later", this);
+	auto* btnGrp = new QDialogButtonBox(this);
+	auto* importNow = new QPushButton("Import Now", this);
+	auto* notThis = new QPushButton("Don't import this", this);
+	auto* noImport = new QPushButton("Never import", this);
+	auto* askLater = new QPushButton("Ask later", this);
 	connect(importNow, SIGNAL(clicked()), this, SLOT(importNowClicked()));
 	connect(notThis, SIGNAL(clicked()), this, SLOT(doNotImportThisClicked()));
 	connect(noImport, SIGNAL(clicked()), this, SLOT(neverImportClicked()));
@@ -66,22 +70,26 @@ ZDLImportDialog::ZDLImportDialog(QWidget *parent):QDialog(parent){
 	importAction = UNKNOWN;
 }
 
-void ZDLImportDialog::askLaterClicked(){
+void ZDLImportDialog::askLaterClicked()
+{
 	importAction = ASKLATER;
 	reject();
 }
 
-void ZDLImportDialog::importNowClicked(){
+void ZDLImportDialog::importNowClicked()
+{
 	importAction = IMPORTNOW;
 	accept();
 }
 
-void ZDLImportDialog::doNotImportThisClicked(){
+void ZDLImportDialog::doNotImportThisClicked()
+{
 	importAction = DONOTIMPORTTHIS;
 	accept();
 }
 
-void ZDLImportDialog::neverImportClicked(){
+void ZDLImportDialog::neverImportClicked()
+{
 	importAction = NEVERIMPORT;
 	accept();
 }

@@ -43,14 +43,14 @@ void SimpleWFA::CreateSimpleProgID(bool local_machine, CreationDisposition creat
 	HKEY hive=local_machine?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER;
 
 	//If creation disposition is not UPDATE_ALWAYS then check if ProgID already exists
-	if (creation_disp!=CD_UPDATE_ALWAYS&&CheckKeyValueData(hive, L"Software\\Classes\\", prog_id, NULL, NULL, NULL, false)==MEETS_CONDITION) {
+	if (creation_disp!=CD_UPDATE_ALWAYS&&CheckKeyValueData(hive, L"Software\\Classes\\", prog_id, nullptr, nullptr, nullptr, false)==MEETS_CONDITION) {
 		//If creation disposition is CREATE_NEW then do not create or update ProgID if it already exists
 		if (creation_disp==CD_CREATE_NEW)
 			return;
 
 		//If creation disposition is CREATE_ALWAYS then ProgID is recreated anew if it already exists
 		if (creation_disp==CD_CREATE_ALWAYS)
-			DeleteKeyValue(hive, L"Software\\Classes\\", prog_id, NULL, NULL);
+			DeleteKeyValue(hive, L"Software\\Classes\\", prog_id, nullptr, nullptr);
 	}
 	
 	//We create large enough buffer that can accomodate application path (prog_path) with both DefaultIcon and Open command values
@@ -60,11 +60,11 @@ void SimpleWFA::CreateSimpleProgID(bool local_machine, CreationDisposition creat
 	//	@="" PROG_OPEN_PARAMS - wcslen(prog_open_params) + 3 characters
 	
 	size_t pth_len=wcslen(prog_path);
-	wchar_t* data_buf=new wchar_t[pth_len+(prog_open_params?std::max((size_t)14, wcslen(prog_open_params)+3):14)+1];	//+1 for terminating NULL
+	wchar_t* data_buf=new wchar_t[pth_len+(prog_open_params ? max((size_t)14, wcslen(prog_open_params)+3):14)+1];	//+1 for terminating nullptr
 	wchar_t* var_buf=data_buf+pth_len+2;	//+2 for encapsulating double quotes
 	
 	//Copy quoted application path to buffer
-	//At this point buffer won't be NULL-terminated
+	//At this point buffer won't be nullptr-terminated
 	data_buf[0]=L'"';
 	wcscpy(data_buf+1, prog_path);	//+1 for leading double quote
 	data_buf[pth_len+1]=L'"';	//+1 for leading double quote
@@ -80,7 +80,7 @@ void SimpleWFA::CreateSimpleProgID(bool local_machine, CreationDisposition creat
 	
 	//Set DefaultIcon
 	if (prog_icon_res_id>1) {
-		swprintf(var_buf, 15, L",-%i", prog_icon_res_id);	//15 is 14 + terminating NULL
+		swprintf(var_buf, 15, L",-%i", prog_icon_res_id);	//15 is 14 + terminating nullptr
 	} else if (prog_icon_res_id) {
 		wcscpy(var_buf, L",0");
 	} else {
@@ -89,35 +89,35 @@ void SimpleWFA::CreateSimpleProgID(bool local_machine, CreationDisposition creat
 	SetValue(hive, L"Software\\Classes\\", prog_id, L"\\DefaultIcon", DEFAULT_VALUE, data_buf, true);
 	
 	//Friendly name
-	SetValue(hive, L"Software\\Classes\\", prog_id, NULL, DEFAULT_VALUE, prog_desc?prog_desc:prog_id, false);
+	SetValue(hive, L"Software\\Classes\\", prog_id, nullptr, DEFAULT_VALUE, prog_desc?prog_desc:prog_id, false);
 
 	delete[] data_buf;
 }
 
 void SimpleWFA::RemoveProgID(bool local_machine, const wchar_t* prog_id)
 {
-	if (prog_id) DeleteKeyValue(local_machine?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, NULL, NULL);
+	if (prog_id) DeleteKeyValue(local_machine?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, nullptr, nullptr);
 }
 
 void SimpleWFA::NotifyShell()
 {
-	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 }
 
 void SimpleWFA::Deassociate(bool local_machine, const wchar_t* extension, const wchar_t* prog_id, const wchar_t* app_exe)
 {
 	if (!prog_id||!extension) return;
 	
-	if (MEETS_CONDITION&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false))
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE);
+	if (MEETS_CONDITION&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false))
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE);
 	
-	if (local_machine&&MEETS_CONDITION&CheckKeyValueData(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false))
-		DeleteKeyValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE);
+	if (local_machine&&MEETS_CONDITION&CheckKeyValueData(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false))
+		DeleteKeyValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE);
 	
 	if ((USER_CHOICE_MATCH|USER_CHOICE_AMBIG|USER_CHOICE_APPEXE)&CheckExplorerUserChoice(extension, prog_id, app_exe)) {
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\UserChoice", NULL);
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Progid");
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Application");
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\UserChoice", nullptr);
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Progid");
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Application");
 	}
 	
 	DeleteKeyValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id);
@@ -130,27 +130,27 @@ void SimpleWFA::Associate(bool local_machine, const wchar_t* extension, const wc
 	if (!prog_id||!extension) return;
 
 	if (local_machine) {
-		SetValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
-		if (DATA_NOT_EQUAL&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false))
-			DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE);		
+		SetValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
+		if (DATA_NOT_EQUAL&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false))
+			DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE);		
 	} else {
-		SetValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
+		SetValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
 	}
 		
 	if ((USER_CHOICE_OTHER|USER_CHOICE_AMBIG|USER_CHOICE_APPEXE)&CheckExplorerUserChoice(extension, prog_id, app_exe)) {
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\UserChoice", NULL);
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Progid");
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Application");
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\UserChoice", nullptr);
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Progid");
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Application");
 	}
 	
-	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, true))
-		DeleteKeyValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", NULL);
+	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true))
+		DeleteKeyValue(HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", nullptr);
 	
-	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, true))
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", NULL);
+	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true))
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", nullptr);
 	
-	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, NULL, true))
-		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", NULL);
+	if ((VALUE_NOT_SINGLE|VALUE_NOT_FOUND)&CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true))
+		DeleteKeyValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", nullptr);
 }
 
 LSTATUS SimpleWFA::DeleteKeyRecursive(HKEY hKeyRoot, const wchar_t* lpSubKey)
@@ -164,12 +164,12 @@ LSTATUS SimpleWFA::DeleteKeyRecursive(HKEY hKeyRoot, const wchar_t* lpSubKey)
 	//WARNING: lpSubKey should NOT end with backslash for this to work
 
 	if ((ret_st=RegOpenKeyEx(hKeyRoot, lpSubKey, 0, KEY_READ, &hKey))==ERROR_SUCCESS) {
-		if ((ret_st=RegQueryInfoKey(hKey, NULL, NULL, NULL, &key_num, &max_key_len, NULL, NULL, NULL, NULL, NULL, NULL))==ERROR_SUCCESS&&key_num) {
+		if ((ret_st=RegQueryInfoKey(hKey, nullptr, nullptr, nullptr, &key_num, &max_key_len, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr))==ERROR_SUCCESS&&key_num) {
 			size_t sub_key_len=wcslen(lpSubKey);
-			wchar_t* path_buf=new wchar_t[sub_key_len+max_key_len+2];	//+2 is for backslash and NULL terminator
+			wchar_t* path_buf=new wchar_t[sub_key_len+max_key_len+2];	//+2 is for backslash and nullptr terminator
 			wchar_t* key_buf=path_buf+sub_key_len+1;	//key_buf references the point in path_buf right after the end of lpSubKey+backslash
 			
-			//Copy lpSubKey to path_buf and terminate it with backslash and NULL
+			//Copy lpSubKey to path_buf and terminate it with backslash and nullptr
 			wcscpy(path_buf, lpSubKey);
 			path_buf[sub_key_len]=L'\\';
 			path_buf[sub_key_len+1]=L'\0';
@@ -180,7 +180,7 @@ LSTATUS SimpleWFA::DeleteKeyRecursive(HKEY hKeyRoot, const wchar_t* lpSubKey)
 			max_key_len++;
 			do {
 				key_len=max_key_len;
-				if ((ret_st=RegEnumKeyEx(hKey, 0, key_buf, &key_len, NULL, NULL, NULL, NULL))==ERROR_SUCCESS)
+				if ((ret_st=RegEnumKeyEx(hKey, 0, key_buf, &key_len, nullptr, nullptr, nullptr, nullptr))==ERROR_SUCCESS)
 					ret_st=DeleteKeyRecursive(hKeyRoot, path_buf);
 			} while (ret_st==ERROR_SUCCESS);
 
@@ -199,7 +199,7 @@ LSTATUS SimpleWFA::DeleteKeyRecursive(HKEY hKeyRoot, const wchar_t* lpSubKey)
 bool SimpleWFA::DeleteKeyValue(HKEY hKey, const wchar_t* lpSubKey, const wchar_t* sub_key_pfix1, const wchar_t* sub_key_pfix2, const wchar_t* lpValueName)
 {
 	bool is_deleted=false;
-	wchar_t* new_sub_key=NULL;
+	wchar_t* new_sub_key=nullptr;
 	
 	if (lpSubKey) {
 		if (sub_key_pfix1) {
@@ -228,7 +228,7 @@ bool SimpleWFA::DeleteKeyValue(HKEY hKey, const wchar_t* lpSubKey, const wchar_t
 bool SimpleWFA::SetValue(HKEY hKey, const wchar_t* lpSubKey, const wchar_t* sub_key_pfix1, const wchar_t* sub_key_pfix2, const wchar_t* lpValueName, const wchar_t* lpData, bool expandable_value)
 {
 	bool is_set=false;
-	wchar_t* new_sub_key=NULL;
+	wchar_t* new_sub_key=nullptr;
 	
 	if (lpSubKey&&lpValueName&&lpData) {
 		if (sub_key_pfix1) {
@@ -240,7 +240,7 @@ bool SimpleWFA::SetValue(HKEY hKey, const wchar_t* lpSubKey, const wchar_t* sub_
 		}
 		
 		//Using RegCreateKeyEx instead of RegOpenKeyEx because key can be absent from registry
-		if (RegCreateKeyEx(hKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hKey, NULL)==ERROR_SUCCESS) {
+		if (RegCreateKeyEx(hKey, lpSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, nullptr, &hKey, nullptr)==ERROR_SUCCESS) {
 			is_set=RegSetValueEx(hKey, lpValueName, 0, expandable_value?REG_EXPAND_SZ:REG_SZ, (BYTE*)lpData, (wcslen(lpData)+1)*sizeof(wchar_t))==ERROR_SUCCESS;			
 			RegCloseKey(hKey);
 		}
@@ -261,23 +261,23 @@ SimpleWFA::AssocStatus SimpleWFA::CheckAssociationStatus(bool local_machine, boo
 	
 	if (local_machine) {
 		if (check_registration) {
-			PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", prog_id, NULL, NULL, NULL, false);
-			if (app_exe) PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\Applications\\", app_exe, NULL, NULL, NULL, false);
+			PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", prog_id, nullptr, nullptr, nullptr, false);
+			if (app_exe) PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\Applications\\", app_exe, nullptr, nullptr, nullptr, false);
 		}
-		PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
-		PassOnKeyValueData(check_failed, MEETS_CONDITION|NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION|NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
 	} else {
 		if (check_registration) {
-			PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, NULL, NULL, NULL, false);
-			if (app_exe) PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\Applications\\", app_exe, NULL, NULL, NULL, false);
+			PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, nullptr, nullptr, nullptr, false);
+			if (app_exe) PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\Applications\\", app_exe, nullptr, nullptr, nullptr, false);
 		}
-		PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
 	}
 
 	if (PassOnExplorerUserChoice(check_failed, USER_CHOICE_MATCH|USER_CHOICE_NONE, extension, prog_id, app_exe)==USER_CHOICE_NONE) {
-		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, true);
-		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, true);
-		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, NULL, true);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true);
+		PassOnKeyValueData(check_failed, MEETS_CONDITION|KEY_IS_EMPTY|KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, nullptr, true);
 	}
 
 	if (!check_failed) return ASSOCIATED_AFF;
@@ -286,11 +286,11 @@ SimpleWFA::AssocStatus SimpleWFA::CheckAssociationStatus(bool local_machine, boo
 	
 	if (check_registration) {
 		check_failed=0;
-		PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, NULL, NULL, NULL, false);
-		PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", prog_id, NULL, NULL, NULL, false);
+		PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\", prog_id, nullptr, nullptr, nullptr, false);
+		PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", prog_id, nullptr, nullptr, nullptr, false);
 		if (app_exe) {
-			PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\Applications\\", app_exe, NULL, NULL, NULL, false);
-			PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\Applications\\", app_exe, NULL, NULL, NULL, false);
+			PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_CURRENT_USER, L"Software\\Classes\\Applications\\", app_exe, nullptr, nullptr, nullptr, false);
+			PassOnKeyValueData(check_failed, KEY_NOT_FOUND, HKEY_LOCAL_MACHINE, L"Software\\Classes\\Applications\\", app_exe, nullptr, nullptr, nullptr, false);
 		}
 		if (!check_failed) return ASSOCIATED_NEG;
 	}
@@ -298,12 +298,12 @@ SimpleWFA::AssocStatus SimpleWFA::CheckAssociationStatus(bool local_machine, boo
 	check_failed=0;
 	if (PassOnExplorerUserChoice(check_failed, USER_CHOICE_NONE, extension, prog_id, app_exe)==USER_CHOICE_OTHER)
 		return ASSOCIATED_NEG;
-	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, false);
-	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, NULL, false);
-	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, NULL, false);
-	if (PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false)==DATA_NOT_EQUAL)
+	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, false);
+	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, L"\\OpenWithProgids", prog_id, nullptr, false);
+	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, L"\\OpenWithProgids", prog_id, nullptr, false);
+	if (PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE, HKEY_CURRENT_USER, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false)==DATA_NOT_EQUAL)
 		return ASSOCIATED_NEG;
-	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE|DATA_NOT_EQUAL, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, NULL, DEFAULT_VALUE, prog_id, false);
+	PassOnKeyValueData(check_failed, NO_KEY_OR_VALUE|DATA_NOT_EQUAL, HKEY_LOCAL_MACHINE, L"Software\\Classes\\", extension, nullptr, DEFAULT_VALUE, prog_id, false);
 	
 	//ASSOCIATED_DUNNO
 	
@@ -336,7 +336,7 @@ DWORD SimpleWFA::CheckExplorerUserChoice(const wchar_t* extension, const wchar_t
 	}
 	
 	if (chk_st!=SECURITY_ISSUE) {
-		chk_st=CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Progid", prog_id, false);
+		chk_st=CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Progid", prog_id, false);
 		if (chk_st==MEETS_CONDITION) {
 			pid_eq=true;
 			exists++;
@@ -345,7 +345,7 @@ DWORD SimpleWFA::CheckExplorerUserChoice(const wchar_t* extension, const wchar_t
 		}
 
 		if (chk_st!=SECURITY_ISSUE&&exists<2) {
-			chk_st=CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, NULL, L"Application", app_exe, false);
+			chk_st=CheckKeyValueData(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\", extension, nullptr, L"Application", app_exe, false);
 			if (chk_st==MEETS_CONDITION) {
 				app_eq=true;
 				exists++;
@@ -383,7 +383,7 @@ DWORD SimpleWFA::CheckKeyValueData(HKEY hKey, const wchar_t* lpSubKey, const wch
 {
 	LSTATUS ret_st;
 	DWORD buf_len, val_num;
-	wchar_t* new_sub_key=NULL;
+	wchar_t* new_sub_key=nullptr;
 	DWORD chk_st=KEY_NOT_FOUND;
 	
 	if (lpSubKey&&sub_key_pfix1) {
@@ -397,7 +397,7 @@ DWORD SimpleWFA::CheckKeyValueData(HKEY hKey, const wchar_t* lpSubKey, const wch
 	if (!lpSubKey||(ret_st=RegOpenKeyEx(hKey, lpSubKey, 0, KEY_READ, &hKey))==ERROR_SUCCESS) {
 		chk_st=VALUE_NOT_FOUND;
 		
-		if (lpValueName&&(ret_st=RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, &val_num, NULL, &buf_len, NULL, NULL))==ERROR_SUCCESS) {
+		if (lpValueName&&(ret_st=RegQueryInfoKey(hKey, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, &val_num, nullptr, &buf_len, nullptr, nullptr))==ERROR_SUCCESS) {
 			//If default value is not set it doesn't count towards number of key values
 			//Default value with empty string is still set default value
 			if (val_num) {
@@ -406,11 +406,11 @@ DWORD SimpleWFA::CheckKeyValueData(HKEY hKey, const wchar_t* lpSubKey, const wch
 					//Windows always stores registry string-type data in Unicode - even if actual value type is set to REG_NONE it still can be valid Unicode string
 					//If using ANSI version of RegQueryValueEx, it will internally convert returned Unicode strings to ANSI ones but only for REG_SZ, REG_MULTI_SZ and REG_EXPAND_SZ types
 					//If type is REG_NONE you'll get original dta that, in case of Unicode string, won't be converted to ANSI
-					//If querying default value (lpValueName is NULL or empty string) and it's not set - RegQueryValueEx returns ERROR_FILE_NOT_FOUND
-					//+1 is for possible missing NULL-terminator
+					//If querying default value (lpValueName is nullptr or empty string) and it's not set - RegQueryValueEx returns ERROR_FILE_NOT_FOUND
+					//+1 is for possible missing nullptr-terminator
 					wchar_t* data_buf=new wchar_t[buf_len/sizeof(wchar_t)+1];
 					
-					if ((ret_st=RegQueryValueEx(hKey, lpValueName, NULL, NULL, (LPBYTE)data_buf, &buf_len))==ERROR_SUCCESS) {
+					if ((ret_st=RegQueryValueEx(hKey, lpValueName, nullptr, nullptr, (LPBYTE)data_buf, &buf_len))==ERROR_SUCCESS) {
 						//Make sure that buffer is terminated
 						if (!buf_len||data_buf[buf_len/sizeof(wchar_t)-1]!=L'\0') data_buf[buf_len/sizeof(wchar_t)]=L'\0';
 						
@@ -422,7 +422,7 @@ DWORD SimpleWFA::CheckKeyValueData(HKEY hKey, const wchar_t* lpSubKey, const wch
 
 					delete[] data_buf;
 				} else {
-					ret_st=RegQueryValueEx(hKey, lpValueName, NULL, NULL, NULL, NULL);
+					ret_st=RegQueryValueEx(hKey, lpValueName, nullptr, nullptr, nullptr, nullptr);
 				}
 
 				if (ret_st==ERROR_SUCCESS&&require_single_value&&val_num>1) {

@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZNAMELISTABLE_H_
-#define _ZNAMELISTABLE_H_
+#pragma once
 
 #include "ZDLListable.h"
 #include "zdlconf.hpp"
 
-class ZDLNameListable : public ZDLListable{
-	Q_OBJECT
-	public:
-		ZDLNameListable( QListWidget *parent, int type, QString qfile, QString name);
-		~ZDLNameListable();
-		QString getFile();
-		QString getName();
-		void setDisplayName(QString name);
-		void setFile(QString file);
-	protected:
-		QString generateName();
-		QString generateName(ZDLConf *zconf);
-		QString fileName;
-		QString displayName;
+class ZDLNameListable : public ZDLListable
+{
+ Q_OBJECT
+ public:
+	ZDLNameListable(QListWidget* parent, int type, QString qfile, QString name);
+	~ZDLNameListable() override;
+	virtual QString getFile();
+	QString getName() override;
+	void setDisplayName(QString name);
+	void setFile(QString file);
+ protected:
+	QString generateName();
+	QString generateName(ZDLConf* zconf);
+	QString fileName;
+	QString displayName;
 };
-
-#endif

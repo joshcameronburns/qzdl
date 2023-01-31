@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +17,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZQWIDGET_H_
-#define _ZQWIDGET_H_
+#pragma once
+
 #include <QObject>
 #include <QWidget>
 
-
-class ZDLWidget: public QWidget{
-Q_OBJECT
-public: 
-	ZDLWidget(ZDLWidget *parent);
-	ZDLWidget(QWidget *parent);
+class ZDLWidget : public QWidget
+{
+ Q_OBJECT
+ public:
+	explicit ZDLWidget(ZDLWidget* parent);
+	explicit ZDLWidget(QWidget* parent);
 	ZDLWidget();
-	virtual void setZParent(ZDLWidget *parent);
+	void setZParent(ZDLWidget* parent);
 	virtual void rebuild();
 	virtual void newConfig();
-signals:
+ signals:
 	void buildChildren(ZDLWidget*);
 	void buildParent(ZDLWidget*);
 	void readChildren(ZDLWidget*);
 	void readParent(ZDLWidget*);
-public slots:
+ public slots:
 	virtual void notifyFromChild(ZDLWidget*);
 	virtual void notifyFromParent(ZDLWidget*);
 	virtual void readFromChild(ZDLWidget*);
@@ -46,8 +46,6 @@ public slots:
 //	virtual void fromUpstream(ZDLWidget *origin);
 //	virtual void fromDownstream(ZDLWidget *origin);
 
-private:
-	ZDLWidget *zparent;
+ private:
+	ZDLWidget* zparent{};
 };
-#endif
-

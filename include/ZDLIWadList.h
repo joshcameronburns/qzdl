@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +17,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZIWADLIST_H_
-#define _ZIWADLIST_H_
+#pragma once
+
 #include "ZDLListWidget.h"
-class ZDLIWadList : public ZDLListWidget{
-	Q_OBJECT
-	public:
-		ZDLIWadList(ZDLWidget *parent);
-		virtual void addButton();
-		virtual void rebuild();
-		virtual void newConfig();
-		virtual void editButton(QListWidgetItem * item);
-		virtual void newDrop(QStringList fileList);
-	protected slots:
-		void wizardAddButton();
+
+class ZDLIWadList : public ZDLListWidget
+{
+ Q_OBJECT
+ public:
+	explicit ZDLIWadList(ZDLWidget* parent);
+	void addButton() override;
+	void rebuild() override;
+	void newConfig() override;
+	void editButton(QListWidgetItem* item) override;
+	void newDrop(QStringList fileList);
+ protected slots:
+	void wizardAddButton();
 };
-
-#endif
-

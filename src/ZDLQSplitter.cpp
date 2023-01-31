@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +18,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
 #include <QApplication>
 #include "ZDLQSplitter.h"
 
-ZDLQSplitter::ZDLQSplitter(ZDLWidget *parent):ZDLWidget(parent){
+ZDLQSplitter::ZDLQSplitter(ZDLWidget* parent) : ZDLWidget(parent)
+{
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
-	//std::cout << "SPLIT: Using ZDLWidget as parent" << std::endl;
 	box->addWidget(split);
-	setContentsMargins(0,0,0,0);
-	layout()->setContentsMargins(0,0,0,0);
+	setContentsMargins(0, 0, 0, 0);
+	layout()->setContentsMargins(0, 0, 0, 0);
 }
 
-ZDLQSplitter::ZDLQSplitter(QWidget *parent):ZDLWidget(parent){
+ZDLQSplitter::ZDLQSplitter(QWidget* parent) : ZDLWidget(parent)
+{
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
-	//std::cout << "SPLIT: Using QWidget as parent" << std::endl;
 	box->addWidget(split);
-	setContentsMargins(0,0,0,0);
-	layout()->setContentsMargins(0,0,0,0);
+	setContentsMargins(0, 0, 0, 0);
+	layout()->setContentsMargins(0, 0, 0, 0);
 }
 
-QSplitter *ZDLQSplitter::getSplit(){
+QSplitter* ZDLQSplitter::getSplit()
+{
 	return split;
 }
 
-void ZDLQSplitter::addChild(ZDLWidget *child){
+void ZDLQSplitter::addChild(ZDLWidget* child)
+{
 	split->addWidget(child);
 	//Hook the child up with our internal signal handling
 	child->setZParent(this);
 }
 
-void ZDLQSplitter::addChild(QWidget *child){
+void ZDLQSplitter::addChild(QWidget* child)
+{
 	split->addWidget(child);
 }

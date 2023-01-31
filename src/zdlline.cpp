@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QtCore>
 #include "zdlcommon.h"
+#include "zdlline.hpp"
 
-ZDLLine::ZDLLine(QString inLine)
+ZDLLine::ZDLLine(const QString& inLine)
 {
 	flags = FLAG_NORMAL;
 	line = inLine.trimmed();
 	comment = "";
-	if (line[0] == ';' || line[0] == '#'){
+	if (line[0] == ';' || line[0] == '#')
+	{
 		type = 2;
-	}else{
+	}
+	else
+	{
 		type = 0;
 		parse();
 	}
@@ -45,10 +50,10 @@ ZDLLine::ZDLLine()
 }
 
 ZDLLine::~ZDLLine()
-{
-}
+= default;
 
-void ZDLLine::setIsCopy(bool val){
+void ZDLLine::setIsCopy(bool val)
+{
 	isCopy = val;
 }
 
@@ -67,28 +72,37 @@ QString ZDLLine::getLine()
 	return QFD_QT_SEP(line);
 }
 
-int ZDLLine::setValue(QString inValue)
+void ZDLLine::setValue(const QString& inValue)
 {
-	if(isCopy){
-		qDebug() << "SETTING A VALUE ON A COPY" << endl;
+	if (isCopy)
+	{
+		qDebug() << "SETTING A VALUE ON A COPY" << Qt::endl;
 	}
 	// Don't overwrite if the string is the same!
-	if(inValue.compare(value, Qt::CaseInsensitive) == 0){
-		return 0;
+	if (inValue.compare(value, Qt::CaseInsensitive) == 0)
+	{
+		return;
 	}
+
 	line = variable + QString("=") + inValue;
-	if(comment.size() > 0){
+
+	if (comment.size() > 0)
+	{
 		line = line + QString("     ") + comment;
 	}
+
 	value = inValue;
-	return 0;
 }
 
-int ZDLLine::findComment(char delim){
-	int cloc = line.indexOf(delim, line.size());
-	if (cloc > -1){
-		if (cloc > 0){
-			if (line[cloc-1] != '\\'&&line[cloc-1] != '/'){
+int ZDLLine::findComment(char delim)
+{
+	int cloc = (int)line.indexOf(delim, line.size());
+	if (cloc > -1)
+	{
+		if (cloc > 0)
+		{
+			if (line[cloc - 1] != '\\' && line[cloc - 1] != '/')
+			{
 				return cloc;
 			}
 		}
@@ -100,24 +114,31 @@ void ZDLLine::parse()
 {
 	int cloc = findComment(';');
 	int cloc2 = findComment('#');
-	if(cloc != -1 && cloc2 != -1){
-		cloc = qMin(cloc,cloc2);
-	}else if(cloc == -1 && cloc2 != -1){
+	if (cloc != -1 && cloc2 != -1)
+	{
+		cloc = qMin(cloc, cloc2);
+	}
+	else if (cloc == -1 && cloc2 != -1)
+	{
 		cloc = cloc2;
 	}
-	
-	if(cloc != -1){
+
+	if (cloc != -1)
+	{
 		//Strip out comment
 		comment = line.mid(cloc, line.size()).trimmed();
-		
+
 	}
-	
-	int loc = line.indexOf("=", 0);
-	if (loc > -1){
+
+	int loc = (int)line.indexOf("=", 0);
+	if (loc > -1)
+	{
 		variable = line.mid(0, loc).trimmed();
-		value = line.mid(loc+1, line.length() - loc - 1).trimmed();
+		value = line.mid(loc + 1, line.length() - loc - 1).trimmed();
 		type = 0;
-	}else{
+	}
+	else
+	{
 		type = 1;
 		variable = line;
 		value = "";
@@ -125,8 +146,9 @@ void ZDLLine::parse()
 
 }
 
-ZDLLine *ZDLLine::clone(){
-	ZDLLine *copy = new ZDLLine();
+ZDLLine* ZDLLine::clone()
+{
+	auto* copy = new ZDLLine();
 	copy->variable = variable;
 	copy->comment = comment;
 	copy->line = line;
@@ -136,13 +158,19 @@ ZDLLine *ZDLLine::clone(){
 	return copy;
 }
 
-bool ZDLLine::setFlags(int value){
+bool ZDLLine::setFlags(int flag)
+{
 	// Virtual flags cannot be modified
-	if ((flags & FLAG_NOWRITE) == FLAG_NOWRITE){
-		LOGDATAO() << "Cannot change flags on FLAG_NOWRITE" << endl;
+	if ((flags & FLAG_NOWRITE) == FLAG_NOWRITE)
+	{
+		LOGDATAO() << "Cannot change flags on FLAG_NOWRITE" << Qt::endl;
 		return false;
 	}
-	flags = value;
+	flags = flag;
 	return true;
 }
 
+int ZDLLine::getType()
+{
+	return 0;
+}

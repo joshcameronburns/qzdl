@@ -19,6 +19,11 @@
 
 #include <iterator>
 #include <sstream>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QCheckBox>
+#include <QLabel>
 #include "ZDLConfigurationManager.h"
 #include "ZDLFileAssociations.h"
 #include "SimpleWFA.h"
@@ -33,7 +38,7 @@ AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const
 	bool initial=true;
 	SimpleWFA::AssocStatus res_stat;
 	foreach (const QString &ext, extensions) {
-		SimpleWFA::AssocStatus cur_stat=SimpleWFA::CheckAssociationStatus(hklm, true, ext.utf16(), prog_id.utf16(), NULL);
+		SimpleWFA::AssocStatus cur_stat=SimpleWFA::CheckAssociationStatus(hklm, true, ext.toStdWString().c_str(), prog_id.toStdWString().c_str(), NULL);
 		if (initial) {
 			res_stat=cur_stat;
 			initial=false;
@@ -64,19 +69,19 @@ void AssocListWidget::Process(const QString &file_path)
 
 	if (!remove&&changed&&checkState()==Qt::Checked) {
 		foreach (const QString &ext, extensions) {
-			SimpleWFA::Associate(hklm, ext.utf16(), prog_id.utf16());
+			SimpleWFA::Associate(hklm, ext.toStdWString().c_str(), prog_id.toStdWString().c_str());
 		}
-		SimpleWFA::CreateSimpleProgID(hklm, SimpleWFA::CD_UPDATE_ALWAYS, prog_id.utf16(), file_path.utf16(), desc.utf16(), icon);
+		SimpleWFA::CreateSimpleProgID(hklm, SimpleWFA::CD_UPDATE_ALWAYS, prog_id.toStdWString().c_str(), file_path.toStdWString().c_str(), desc.toStdWString().c_str(), icon);
 	}
 	
 	if (remove||(changed&&checkState()==Qt::Unchecked)) {
 		foreach (const QString &ext, extensions) {
-			SimpleWFA::Deassociate(hklm, ext.utf16(), prog_id.utf16());
+			SimpleWFA::Deassociate(hklm, ext.toStdWString().c_str(), prog_id.toStdWString().c_str());
 		}
 	}
 
 	if (remove) {
-		SimpleWFA::RemoveProgID(hklm, prog_id.utf16());
+		SimpleWFA::RemoveProgID(hklm, prog_id.toStdWString().c_str());
 	}
 }
 

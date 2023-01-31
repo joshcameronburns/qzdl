@@ -17,11 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _ZDLFILEASSOCIATIONS_H_
-#define _ZDLFILEASSOCIATIONS_H_
+#pragma once
 
 #include <QtGui>
 #include <QObject>
+#include <QListWidget>
+#include <QDialog>
 #include <string>
 #include <vector>
 #include <windows.h>
@@ -52,4 +53,3 @@ class ZDLFileAssociations: public QDialog {
 		ZDLFileAssociations(QWidget *parent);
 };
 
-#endif

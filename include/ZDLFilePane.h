@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+#pragma once
+
 #include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
 #include "ZDLFileList.h"
 
-class ZDLFilePane: public ZDLWidget{
-Q_OBJECT
-public: 
-	ZDLFilePane( QWidget *parent=0);
-	void rebuild();
-private:
-	
-	ZDLFileList *fList;	
+class ZDLFilePane : public ZDLWidget
+{
+ Q_OBJECT
+ public:
+	explicit ZDLFilePane(QWidget* parent = nullptr);
+	void rebuild() override;
+ private:
+
+	ZDLFileList* fList;
 };

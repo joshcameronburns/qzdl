@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZDLCOMMON_H_
-#define _ZDLCOMMON_H_
+#pragma once
+
 #include <QtCore>
 
-#define ZDL_FLAG_NAMELESS	0x00001
+#define ZDL_FLAG_NAMELESS    0x00001
 
-#define ZDL_VERSION_STRING "3-1.2"
+#define ZDL_VERSION_STRING "3-2.0"
 #define ZDL_DEV_BUILD 1
-#define ZDL_PRIVATE_VERSION_STRING "3.2.2.3~2017.01.11.git.6e5fe853c7-1.2+lcferrum"
+#define ZDL_PRIVATE_VERSION_STRING "2023.02.01.git.f278043.3-2.0+lcferrum+spacebub"
 
-#ifdef Q_WS_WIN
+#ifdef _WIN32
 #define QFD_FILTER_DELIM    ";"
 #define QFD_FILTER_ALL      "*.*"
 #define QFD_QT_SEP(x)       QDir::fromNativeSeparators(x)
@@ -37,7 +37,7 @@
 #define QFD_QT_SEP(x)       x
 #endif
 
-extern QDebug *zdlDebug;
+extern QDebug* zdlDebug;
 
 #if defined(ZDL_BLACKBOX)
 #include <QtCore>
@@ -71,45 +71,15 @@ extern QDebug *zdlDebug;
 #define DPTR(ptr) QString("")
 #endif
 
-#if QT_VERSION < 0x94040
-#define LOCK_CLASS               QMutex
-#define LOCK_BUILDER()           new QMutex(QMutex::Recursive)
+#define LOCK_CLASS               QRecursiveMutex
+#define LOCK_BUILDER()           new QRecursiveMutex()
 #define GET_READLOCK(mlock)      (mlock)->lock()
 #define RELEASE_READLOCK(mlock)  (mlock)->unlock()
 #define GET_WRITELOCK(mlock)     (mlock)->lock()
 #define RELEASE_WRITELOCK(mlock) (mlock)->unlock()
 #define TRY_READLOCK(mlock, to)  (mlock)->tryLock(to)
 #define TRY_WRITELOCK(mlock, to) (mlock)->tryLock(to)
-#ifndef _ZDL_NO_WARNINGS
-#ifdef __GNUC__
-#warning Using Old Locking
-#else
-#pragma message("Warning: Using Old Locking")
-#endif
-#endif
-
-#else
-
-#define LOCK_CLASS              QReadWriteLock
-#define LOCK_BUILDER()          new QReadWriteLock(QReadWriteLock::Recursive)
-#define GET_READLOCK(lock)      (lock)->lockForRead()
-#define RELEASE_READLOCK(lock)  (lock)->unlock()
-#define GET_WRITELOCK(lock)     (lock)->lockForWrite()
-#define RELEASE_WRITELOCK(lock) (lock)->unlock()
-#define TRY_READLOCK(lock, to)  (lock)->tryLockForRead(to)
-#define TRY_WRITELOCK(lock, to) (lock)->tryLockForWrite(to)
-#ifndef _ZDL_NO_WARNINGS
-#ifdef __GNUC__
-#warning Using New Locking
-#else
-#pragma message("Warning: Using New Locking")
-#endif
-#endif
-
-#endif	
 
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
 #include "zdlconf.hpp"
-
-#endif

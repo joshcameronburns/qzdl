@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2012  Cody Harris
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _LIBWAD_H_
-#define _LIBWAD_H_
+#pragma once
 
 #include <QtCore>
 #include "ZDLMapFile.h"
 
-class DoomWad: public ZDLMapFile {
-	private:
-		QString file;
-	public:
-		DoomWad(const QString &file);
-		virtual QString getIwadinfoName();
-		virtual QStringList getMapNames();
-		virtual bool isMAPXX();
-		virtual ~DoomWad();
+class DoomWad : public ZDLMapFile
+{
+ private:
+	QString file;
+ public:
+	explicit DoomWad(QString file);
+	QString getIwadinfoName() override;
+	QStringList getMapNames() override;
+	bool isMAPXX() override;
+	~DoomWad() override;
 };
-
-#endif

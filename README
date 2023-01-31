@@ -2,6 +2,7 @@ ZDL
 
 1. License
 ----------
+Copyright (c) 2023 spacebub
 Copyright (c) 2018-2019 Lcferrum
 Copyright (c) 2004-2012 ZDL Software Foundation
 
@@ -30,7 +31,7 @@ You can compile binary by yourself (refer to COMPILE that comes with the
 sources) or download binary distribution from GitHub releases section. Project
 homepage at GitHub:
 
-	https://github.com/lcferrum/qzdl
+	https://github.com/spacebub/qzdl
 	
 4. Installation and usage
 -------------------------

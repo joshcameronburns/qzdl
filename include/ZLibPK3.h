@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,22 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _ZLIBPK3_H_
-#define _ZLIBPK3_H_
+#pragma once
 
 #include <QtCore>
 #include "ZDLMapFile.h"
 
-class ZLibPK3: public ZDLMapFile {
-	private:
-		QString file;
-	public:
-		ZLibPK3(const QString &file);
-		virtual QString getIwadinfoName();
-		virtual QStringList getMapNames();
-		virtual bool isMAPXX();
-		virtual ~ZLibPK3();
+class ZLibPK3 : public ZDLMapFile
+{
+ private:
+	QString file;
+ public:
+	explicit ZLibPK3(QString  file);
+	QString getIwadinfoName() override;
+	QStringList getMapNames() override;
+	bool isMAPXX() override;
+	~ZLibPK3() override;
 };
-
-#endif

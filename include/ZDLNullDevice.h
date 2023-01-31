@@ -1,23 +1,17 @@
-#ifndef _ZDL_NULL_DEVICE_H_
-#define _ZDL_NULL_DEVICE_H_
+#pragma once
 
 #include <QtCore>
 
-class ZDLNullDevice : public QIODevice {
-public:
-	virtual qint64 readData(char* data, qint64 len){
-		Q_UNUSED(data);
-		Q_UNUSED(len);
+class ZDLNullDevice : public QIODevice
+{
+ public:
+	qint64 readData([[maybe_unused]] char* data, [[maybe_unused]] qint64 len) override
+	{
 		return 0;
 	}
 
-	virtual qint64 writeData(const char* data, qint64 len){
-		Q_UNUSED(data);
-		Q_UNUSED(len);
+	qint64 writeData([[maybe_unused]] const char* data, [[maybe_unused]] qint64 len) override
+	{
 		return 0;
 	}
 };
-
-
-
-#endif

@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +17,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _ZDLLINE_HPP_
-#define _ZDLLINE_HPP_
+#pragma once
 
 #include <QtCore>
  
-#define FLAG_NORMAL	0	// Normal flag
-#define FLAG_VIRTUAL	1	// Does not get read/written, not cloned
-#define FLAG_NOWRITE	2	// Can not write to this value
-#define FLAG_TEMP	4	// Read/write and cloned, but not written
+#define FLAG_NORMAL   0    // Normal flag
+#define FLAG_VIRTUAL  1    // Does not get read/written, not cloned
+#define FLAG_NOWRITE  2    // Can not write to this value
+#define FLAG_TEMP     4    // Read/write and cloned, but not written
 
-class ZDLLine{
+class ZDLLine
+{
 	friend class ZDLVariables;
-public:
-	ZDLLine(QString inLine);
+ public:
+	explicit ZDLLine(const QString& inLine);
 	ZDLLine();
 	~ZDLLine();
-	int getType();
+	static int getType();
 	QString getValue();
 	QString getVariable();
 	QString getLine();
-	int setValue(QString inValue);
-	ZDLLine *clone();
+	void setValue(const QString& inValue);
+	ZDLLine* clone();
 	void setIsCopy(bool val);
-	bool setFlags(int val);
-	int getFlags(){return flags;}
-private:
+	bool setFlags(int flag);
+	[[nodiscard]] int getFlags() const
+	{
+		return flags;
+	}
+ private:
 	bool isCopy;
 	void parse();
 	int findComment(char delim);
@@ -51,8 +54,5 @@ private:
 	QString comment;
 	QString value;
 	QString variable;
-	int flags;
+	int flags{};
 };
-
-#endif
-

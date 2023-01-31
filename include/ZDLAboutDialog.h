@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,21 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZABOUTDIALOG_H_
-#define _ZABOUTDIALOG_H_
+#pragma once
 
 #include <QtGui>
 #include <QObject>
+#include <QDialog>
 #include "ZDLWidget.h"
 
-class ZDLAboutDialog: public QDialog{
-Q_OBJECT
-public: 
-	ZDLAboutDialog(ZDLWidget *parent=0);
-	protected slots:
-		void close();
-		
+class ZDLAboutDialog : public QDialog
+{
+ Q_OBJECT
+ public:
+	explicit ZDLAboutDialog(ZDLWidget* parent = nullptr);
+ protected slots:
+	void close();
 };
-
-#endif

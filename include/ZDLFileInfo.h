@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,31 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _ZDLIFILEINFO_H_
-#define _ZDLIFILEINFO_H_
+#pragma once
 
 #include <QFileInfo>
 
-class ZDLFileInfo: public QFileInfo {
-	public: 
-		ZDLFileInfo();
-		ZDLFileInfo(const QString &file);
-		virtual QString GetFileDescription();
+class ZDLFileInfo : public QFileInfo
+{
+ public:
+	ZDLFileInfo();
+	explicit ZDLFileInfo(const QString& file);
+	virtual QString GetFileDescription();
 };
 
-class ZDLIwadInfo: public ZDLFileInfo {
-	public: 
-		ZDLIwadInfo();
-		ZDLIwadInfo(const QString &file);
-		virtual QString GetFileDescription();
+class ZDLIwadInfo : public ZDLFileInfo
+{
+ public:
+	ZDLIwadInfo();
+	explicit ZDLIwadInfo(const QString& file);
+	QString GetFileDescription() override;
 };
 
-class ZDLAppInfo: public ZDLFileInfo {
-	public: 
-		ZDLAppInfo();
-		ZDLAppInfo(const QString &file);
-		virtual QString GetFileDescription();
+class ZDLAppInfo : public ZDLFileInfo
+{
+ public:
+	ZDLAppInfo();
+	explicit ZDLAppInfo(const QString& file);
+	QString GetFileDescription() override;
 };
-
-#endif
