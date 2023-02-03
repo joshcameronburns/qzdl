@@ -30,7 +30,7 @@ class ZDLIWadList : public ZDLListWidget
 	void rebuild() override;
 	void newConfig() override;
 	void editButton(QListWidgetItem* item) override;
-	void newDrop(QStringList fileList);
+	void newDrop(const QStringList& fileList) override;
  protected slots:
 	void wizardAddButton();
 };

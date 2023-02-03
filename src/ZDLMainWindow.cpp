@@ -650,7 +650,10 @@ QStringList ParseParams(const QString& params)
 	{
 	case 0:
 		for (size_t i = 0; i < result.we_wordc; i++)
+		{
 			plist << result.we_wordv[i];
+		}
+		[[fallthrough]];
 	case WRDE_NOSPACE:    //If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
 		wordfree(&result);
 	}

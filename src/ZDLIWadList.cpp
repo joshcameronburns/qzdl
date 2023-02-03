@@ -105,7 +105,7 @@ void ZDLIWadList::rebuild()
 	}
 }
 
-void ZDLIWadList::newDrop(QStringList fileList)
+void ZDLIWadList::newDrop(const QStringList& fileList)
 {
 	LOGDATAO() << "newDrop" << Qt::endl;
 

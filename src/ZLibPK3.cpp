@@ -40,7 +40,7 @@ QStringList ZLibPK3::getMapNames()
 		if (mz_uint fnum = mz_zip_reader_get_num_files(&zip_archive))
 		{
 			mz_zip_archive_file_stat file_stat;
-			mz_uint mapinfo_idx;
+			mz_uint mapinfo_idx{};
 			bool mapinfo = false;
 			bool zmapinfo = false;
 

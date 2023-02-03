@@ -30,9 +30,9 @@ union magic_t
 	qint32 x;
 };
 
-const magic_t iwad_m = { 'I', 'W', 'A', 'D' };
-const magic_t pwad_m = { 'P', 'W', 'A', 'D' };
-const magic_t zip_m = { 'P', 'K', 0x03, 0x04 };
+const magic_t iwad_m = { {'I', 'W', 'A', 'D'} };
+const magic_t pwad_m = { {'P', 'W', 'A', 'D'} };
+const magic_t zip_m = { {'P', 'K', 0x03, 0x04} };
 
 ZDLMapFile::~ZDLMapFile()
 = default;

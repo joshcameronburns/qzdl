@@ -26,7 +26,7 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
 
-void PlayersValidator::fixup(QString& input) const
+void PlayersValidator::fixup([[maybe_unused]] QString& input) const
 {
 	validated_cb->setEditable(false);
 	validated_cb->setCurrentIndex(0);
