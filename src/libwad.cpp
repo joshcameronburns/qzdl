@@ -20,47 +20,11 @@
 
 #include <QRegularExpression>
 #include <utility>
+#include <fstream>
 #include "libwad.h"
 
-struct wadinfo_t
-{
-	int numlumps;
-	int infotableofs;
-};
-
-struct filelump_t
-{
-	int filepos;
-	int size;
-	union
-	{
-		struct
-		{
-			qint32 x1;
-			qint32 x2;
-		};
-	};
-};
-
-union name8_t
-{
-	char name[8];
-	struct
-	{
-		qint32 x1;
-		qint32 x2;
-	};
-};
-
-const name8_t things_lump = { 'T', 'H', 'I', 'N', 'G', 'S', '\0', '\0' };
-const name8_t textmap_lump = { 'T', 'E', 'X', 'T', 'M', 'A', 'P', '\0' };
-const name8_t iwadinfo_lump = { 'I', 'W', 'A', 'D', 'I', 'N', 'F', 'O' };
-const name8_t map01_lump = { 'M', 'A', 'P', '0', '1', '\0', '\0', '\0' };
-
-#define NAME8_CMP(f, l) (f.x1==l.x1&&f.x2==l.x2)
-
 DoomWad::DoomWad(QString file) :
-	file(std::move(file))
+	m_file(std::move(file))
 {
 }
 
@@ -69,130 +33,111 @@ DoomWad::~DoomWad()
 
 QStringList DoomWad::getMapNames()
 {
-	QFile wad(file);
 	QStringList map_names;
+	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (wad.open(QIODevice::ReadOnly))
+	if (!wadStream)
 	{
-		wadinfo_t header{};
-
-		if (wad.read((char*)&header, sizeof(wadinfo_t)) == sizeof(wadinfo_t) && wad.seek(header.infotableofs))
-		{
-			auto* fileinfo = new filelump_t[header.numlumps];
-			qint64 length = (qint64)sizeof(filelump_t) * header.numlumps;
-
-			if (wad.read((char*)fileinfo, length) == length)
-			{
-				name8_t prev_lump_name{};
-				bool prev_lump = false;
-
-				for (int i = 0; i < header.numlumps; i++)
-				{
-					if (NAME8_CMP(fileinfo[i], things_lump) || NAME8_CMP(fileinfo[i], textmap_lump))
-					{
-						if (prev_lump)
-						{
-							map_names << QString(QByteArray::fromRawData(prev_lump_name.name, 8)).toUpper();
-							prev_lump = false;
-						}
-					}
-					else
-					{
-						prev_lump_name.x1 = fileinfo[i].x1;
-						prev_lump_name.x2 = fileinfo[i].x2;
-						prev_lump = true;
-					}
-				}
-			}
-
-			delete[] fileinfo;
-		}
-
-		wad.close();
+		return map_names;
 	}
 
+	wadheader_t header{};
+	wadStream.read((char*)&header, sizeof(header));
+
+	std::vector<wadlump_t> lumps(header.numLumps);
+	wadStream.seekg(header.directoryOffset);
+	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
+	
+	// Generally the WAD structure follows a simple layout,
+	// and we can assume that it will hold for most WADs.
+	// In most cases map lumps follow the pattern:
+	// MAPNAME
+	// THINGS
+	// ...
+	// so we take the first lump name preceding THINGS
+	const char* previous = nullptr;
+	for (const auto& lump: lumps)
+	{
+		if (strcmp("THINGS", lump.name) == 0 && previous != nullptr)
+		{
+			map_names << previous;
+		}
+
+		previous = lump.name;
+	}
+	
+	wadStream.close();
 	return map_names;
 }
 
 QString DoomWad::getIwadinfoName()
 {
-	QFile wad(file);
-	QString iwad_name;
+	QString iwadInfoName;
+	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (wad.open(QIODevice::ReadOnly))
+	if (!wadStream)
 	{
-		wadinfo_t header{};
-
-		if (wad.read((char*)&header, sizeof(wadinfo_t)) == sizeof(wadinfo_t) && wad.seek(header.infotableofs))
-		{
-			auto* fileinfo = new filelump_t[header.numlumps];
-			qint64 length = (qint64)sizeof(filelump_t) * header.numlumps;
-
-			if (wad.read((char*)fileinfo, length) == length)
-			{
-				for (int i = 0; i < header.numlumps; i++)
-				{
-					if (NAME8_CMP(fileinfo[i], iwadinfo_lump))
-					{
-						char* iwadinfo = new char[fileinfo[i].size + 1];
-						iwadinfo[fileinfo[i].size] = '\0';
-
-						if (wad.seek(fileinfo[i].filepos) && wad.read(iwadinfo, fileinfo[i].size) == fileinfo[i].size)
-						{
-							QRegularExpression name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+");
-							QRegularExpressionMatch match = name_re.match(iwadinfo, Qt::CaseInsensitive);
-
-							if (match.hasPartialMatch())
-								iwad_name = match.captured(1);
-						}
-
-						delete[] iwadinfo;
-					}
-				}
-			}
-
-			delete[] fileinfo;
-		}
-
-		wad.close();
+		return iwadInfoName;
 	}
 
-	return iwad_name;
+	wadheader_t header{};
+	wadStream.read((char*)&header, sizeof(header));
+
+	std::vector<wadlump_t> lumps(header.numLumps);
+	wadStream.seekg(header.directoryOffset);
+	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
+	
+	for (const auto& lump: lumps)
+	{
+		if (strcmp("IWADINFO", lump.name) == 0)
+		{
+			char* iwadinfo = new char[lump.length];
+			wadStream.seekg(lump.offset);
+			wadStream.read(iwadinfo, lump.length);
+			
+			QRegularExpression name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+");
+			QRegularExpressionMatch match = name_re.match(iwadinfo, Qt::CaseInsensitive);
+
+			if (match.hasPartialMatch())
+			{
+				iwadInfoName = match.captured(1);
+			}
+			
+			delete[] iwadinfo;
+			break;
+		}
+	}
+
+	wadStream.close();
+	return iwadInfoName;
 }
 
 bool DoomWad::isMAPXX()
 {
-	QFile wad(file);
-	bool is_mapxx = false;
+	bool isMapxx = false;
+	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (wad.open(QIODevice::ReadOnly))
+	if (!wadStream)
 	{
-		wadinfo_t header{};
-
-		if (wad.read((char*)&header, sizeof(wadinfo_t)) == sizeof(wadinfo_t) && wad.seek(header.infotableofs))
-		{
-			auto* fileinfo = new filelump_t[header.numlumps];
-			qint64 length = (qint64)sizeof(filelump_t) * header.numlumps;
-
-			if (wad.read((char*)fileinfo, length) == length)
-			{
-				for (int i = 0; i < header.numlumps; i++)
-				{
-					//In original ZDoom code only global namespace is checked for 'MAP01' lump
-					//Global namespace includes lumps outside of any markers
-					if (NAME8_CMP(fileinfo[i], map01_lump))
-					{
-						is_mapxx = true;
-						break;
-					}
-				}
-			}
-
-			delete[] fileinfo;
-		}
-
-		wad.close();
+		return isMapxx;
 	}
 
-	return is_mapxx;
+	wadheader_t header{};
+	wadStream.read((char*)&header, sizeof(header));
+
+	std::vector<wadlump_t> lumps(header.numLumps);
+	wadStream.seekg(header.directoryOffset);
+	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
+
+	for (const auto& lump: lumps)
+	{
+		if (strcmp("MAP01", lump.name) == 0 )
+		{
+			isMapxx = true;
+			break;
+		}
+	}
+
+	wadStream.close();
+	return isMapxx;
 }

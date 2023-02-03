@@ -67,13 +67,14 @@ for 64 bit builds:
     cmake .. -G "Visual Studio 17 2022" \
     -A x64 \
     -DCMAKE_TOOLCHAIN_FILE="{vcpkg directory from previous step}\scripts\buildsystems\vcpkg.cmake" \
-    -DCMAKE_CXX_FLAGS="/MT" \
+    -DCMAKE_CXX_FLAGS="/MT /MP" \
     -DVCPKG_TARGET_TRIPLET=x64-windows-static
     
 Note that if the /MT flag is not set correctly you can do so manually
 by right clicking the project in solution explorer then Properties > 
 C/C++ > Code Generation and changing the Runtime Library property.
-This is needed for static linking.
+If the /MP flag is not set correctly you can do so manually to speed
+up compilation. The /MT flag is needed for static builds.
 
 4. Compile for Linux
 --------------------

@@ -19,13 +19,27 @@
  */
 #pragma once
 
-#include <QtCore>
+#include <QString>
 #include "ZDLMapFile.h"
 
 class DoomWad : public ZDLMapFile
 {
  private:
-	QString file;
+	struct wadheader_t
+	{
+		[[maybe_unused]] char type[4];
+		int numLumps;
+		int directoryOffset;
+	};
+
+	struct wadlump_t
+	{
+		[[maybe_unused]] int offset;
+		[[maybe_unused]] int length;
+		char name[8];
+	};
+	
+	QString m_file;
  public:
 	explicit DoomWad(QString file);
 	QString getIwadinfoName() override;

@@ -25,7 +25,7 @@
 
 #define ZDL_VERSION_STRING "3-2.0"
 #define ZDL_DEV_BUILD 1
-#define ZDL_PRIVATE_VERSION_STRING "2023.02.01.git.f278043.3-2.0+lcferrum+spacebub"
+#define ZDL_PRIVATE_VERSION_STRING "3-2.0+spacebub"
 
 #ifdef _WIN32
 #define QFD_FILTER_DELIM    ";"
