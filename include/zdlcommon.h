@@ -37,6 +37,14 @@
 #define QFD_QT_SEP(x)       x
 #endif
 
+#ifdef Q_PROCESSOR_X86_32
+constexpr auto PROCESS = "32 bit";
+#elif defined(Q_PROCESSOR_X86_64)
+constexpr auto PROCESS = "64 bit";
+#elif
+constexpr auto PROCESS = "";
+#endif
+
 extern QDebug* zdlDebug;
 
 #if defined(ZDL_BLACKBOX)
