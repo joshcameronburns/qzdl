@@ -56,10 +56,11 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget* parent) : QDialog(parent)
 	auto* url = new QLabel("<a href=https://github.com/spacebub/qzdl>GitHub/qzdl</a>", this);
 	url->setOpenExternalLinks(true);
 	box->addWidget(url);
+	box->addWidget(new QLabel(QString("Qt Version: ") + QString(QT_VERSION_STR), this));
 	box->addWidget(new QLabel(QString("Version: ") + QString(ZDL_PRIVATE_VERSION_STRING), this));
 	box->addWidget(new QLabel(QString("Built on ") + QString(__DATE__) + QString(" at ") + QString(__TIME__), this));
 #ifndef NDEBUG
-	box->addWidget(new QLabel(QString("This is development build"), this));
+	box->addWidget(new QLabel(QString("This is a development build"), this));
 #endif
 	auto* hrMid = new QFrame(this);
 	hrMid->setFrameStyle(QFrame::HLine);

@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
-project(qzdl)
+project(qzdl
+        DESCRIPTION "Launcher for ZDoom based Doom engine source ports"
+        HOMEPAGE_URL "https://github.com/spacebub/qzdl"
+        LANGUAGES C CXX)
 
 if (MSVC)
     add_compile_options(/W4)
@@ -12,11 +15,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 COMPONENTS
-        Core
-        Gui
-        Widgets
-        REQUIRED)
+option(QT5 "Build with Qt5 instead of Qt6" OFF)
+
+if (QT5)
+    find_package(Qt5 COMPONENTS
+            Core
+            Gui
+            Widgets
+            REQUIRED)
+else()
+    find_package(Qt6 COMPONENTS
+            Core
+            Gui
+            Widgets
+            REQUIRED)
+endif()
 
 list(APPEND EXEC
         miniz/miniz.h
