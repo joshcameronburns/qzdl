@@ -12,7 +12,7 @@ set(CMAKE_AUTOUIC ON)
 option(QT5 "Build with Qt5 instead of Qt6" OFF)
 
 if (MSVC)
-    add_compile_options(/W4 /MP)
+    add_compile_options(/W4 /MP /MT)
 else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()

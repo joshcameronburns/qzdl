@@ -1,6 +1,13 @@
 add_executable(qzdl_app)
 
-target_sources(qzdl_app PRIVATE qzdl.cpp)
+if (WIN32)
+    target_sources(qzdl_app PRIVATE
+            qzdl.cpp
+            resources/WIN32/qzdl.rc)
+else()
+    target_sources(qzdl_app PRIVATE
+            qzdl.cpp)
+endif()
 
 target_link_libraries(qzdl_app PRIVATE
         qzdl_base
