@@ -109,7 +109,7 @@ void ZDLIWadList::newDrop(const QStringList& fileList)
 {
 	LOGDATAO() << "newDrop" << Qt::endl;
 
-	for (const auto& i: fileList)
+	for (const QString& i: fileList)
 		insert(new ZDLNameListable(pList, 1001, i, ZDLIwadInfo(i).GetFileDescription()), -1);
 }
 
@@ -118,7 +118,7 @@ void ZDLIWadList::addButton()
 	LOGDATAO() << "Adding new IWADs" << Qt::endl;
 
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), iwad_filters);
-	for (const auto& fileName: fileNames)
+	for (const QString& fileName: fileNames)
 	{
 		LOGDATAO() << "Adding file " << fileName << Qt::endl;
 		saveWadLastDir(fileName);

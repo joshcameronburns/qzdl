@@ -21,7 +21,7 @@
 #include <utility>
 #include "ZLibDir.h"
 
-ZLibDir::ZLibDir(QString  file) :
+ZLibDir::ZLibDir(QString file) :
 	file(std::move(file))
 {
 }
@@ -34,21 +34,21 @@ QStringList ZLibDir::getMapNames()
 	QDir zdir(file);
 	QStringList map_names;
 
-		foreach (const QFileInfo& zname, zdir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+	for (const QFileInfo& zname: zdir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+	{
+		if (ZDLMapFile* mapfile = ZDLMapFile::getMapFile(zname.filePath()))
 		{
-			if (ZDLMapFile* mapfile = ZDLMapFile::getMapFile(zname.filePath()))
-			{
-				map_names += mapfile->getMapNames();
-				delete mapfile;
-			}
+			map_names += mapfile->getMapNames();
+			delete mapfile;
 		}
+	}
 
 	if (zdir.cd("maps"))
 	{    //CD is case insensitive
-			foreach (const QFileInfo& zname, zdir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
-			{
-				map_names << zname.baseName().left(8).toUpper();
-			}
+		for (const QFileInfo& zname: zdir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+		{
+			map_names << zname.baseName().left(8).toUpper();
+		}
 	}
 
 	return map_names;
@@ -88,15 +88,15 @@ bool ZLibDir::isMAPXX()
 
 	if (zdir.cd("maps"))
 	{    //CD is case insensitive
-			foreach (const QString& zname, zdir.entryList(QDir::Files | QDir::NoDotAndDotDot))
+		for (const QString& zname: zdir.entryList(QDir::Files | QDir::NoDotAndDotDot))
+		{
+			if (!zname.compare("map01.wad", Qt::CaseInsensitive)
+				|| !zname.compare("map01.map", Qt::CaseInsensitive))
 			{
-				if (!zname.compare("map01.wad", Qt::CaseInsensitive)
-					|| !zname.compare("map01.map", Qt::CaseInsensitive))
-				{
-					is_mapxx = true;
-					break;
-				}
+				is_mapxx = true;
+				break;
 			}
+		}
 	}
 
 	return is_mapxx;

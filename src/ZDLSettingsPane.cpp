@@ -157,14 +157,14 @@ QStringList ZDLSettingsPane::getFilesMaps()
 			{
 				QStringList maps;
 
-					foreach (ZDLLine* line, vctr)
+				for (ZDLLine* line: vctr)
+				{
+					if (ZDLMapFile* mapfile = ZDLMapFile::getMapFile(line->getValue()))
 					{
-						if (ZDLMapFile* mapfile = ZDLMapFile::getMapFile(line->getValue()))
-						{
-							maps += mapfile->getMapNames();
-							delete mapfile;
-						}
+						maps += mapfile->getMapNames();
+						delete mapfile;
 					}
+				}
 
 				return maps;
 			}
@@ -318,7 +318,7 @@ void ZDLSettingsPane::rebuild()
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex(QString("^p[0-9]+f$"), fileVctr);
 
-		for (auto & i : fileVctr)
+		for (auto& i: fileVctr)
 		{
 			QString value = i->getVariable();
 
@@ -350,7 +350,7 @@ void ZDLSettingsPane::rebuild()
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 
-		for (auto & i : fileVctr)
+		for (auto& i: fileVctr)
 		{
 			QString value = i->getVariable();
 
@@ -420,7 +420,7 @@ void ZDLSettingsPane::newConfig()
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 
-		for (auto & i : fileVctr)
+		for (auto& i: fileVctr)
 		{
 			QString value = i->getVariable();
 
@@ -469,7 +469,7 @@ void ZDLSettingsPane::newConfig()
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 
-		for (auto & i : fileVctr)
+		for (auto& i: fileVctr)
 		{
 			QString value = i->getVariable();
 

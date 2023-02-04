@@ -124,8 +124,9 @@ int ZDLSection::getRegex(const QString& regex, QVector<ZDLLine*>& vctr)
 	}
 	READUNLOCK();
 	return (int)vctr.size();
-#endif
+#else
 	return 0;
+#endif
 }
 
 int ZDLSection::setValue(const QString& variable, const QString& value)

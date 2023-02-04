@@ -56,7 +56,7 @@ QStringList DoomWad::getMapNames()
 	// ...
 	// so we take the first lump name preceding THINGS
 	const char* previous = nullptr;
-	for (const auto& lump: lumps)
+	for (const wadlump_t& lump: lumps)
 	{
 		if (strcmp("THINGS", lump.name) == 0 && previous != nullptr)
 		{
@@ -87,7 +87,7 @@ QString DoomWad::getIwadinfoName()
 	wadStream.seekg(header.directoryOffset);
 	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
 	
-	for (const auto& lump: lumps)
+	for (const wadlump_t& lump: lumps)
 	{
 		if (strcmp("IWADINFO", lump.name) == 0)
 		{
@@ -129,7 +129,7 @@ bool DoomWad::isMAPXX()
 	wadStream.seekg(header.directoryOffset);
 	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
 
-	for (const auto& lump: lumps)
+	for (const wadlump_t& lump: lumps)
 	{
 		if (strcmp("MAP01", lump.name) == 0 )
 		{

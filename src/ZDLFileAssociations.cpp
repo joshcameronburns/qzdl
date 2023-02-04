@@ -30,92 +30,103 @@
 #include "zdlcommon.h"
 #include "resource.h"
 
-AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const QString &prog_id, const QString &desc, const QString &exts, bool hklm, UINT icon):
+AssocListWidget::AssocListWidget(const QString& text, QListWidget* parent, const QString& prog_id, const QString& desc, const QString& exts, bool hklm, UINT icon)
+	:
 	QListWidgetItem(text, parent), prog_id(prog_id), desc(desc), extensions(exts.split(" ")), icon(icon), hklm(hklm), remove(false)
 {
-	setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+	setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 
-	bool initial=true;
+	bool initial = true;
 	SimpleWFA::AssocStatus res_stat;
-	foreach (const QString &ext, extensions) {
-		SimpleWFA::AssocStatus cur_stat=SimpleWFA::CheckAssociationStatus(hklm, true, ext.toStdWString().c_str(), prog_id.toStdWString().c_str(), NULL);
-		if (initial) {
-			res_stat=cur_stat;
-			initial=false;
-		} else if (res_stat!=cur_stat) {
-			res_stat=SimpleWFA::ASSOCIATED_DUNNO;
+	for (const QString& ext: extensions)
+	{
+		SimpleWFA::AssocStatus cur_stat = SimpleWFA::CheckAssociationStatus(hklm, true, ext.toStdWString().c_str(), prog_id.toStdWString().c_str(), NULL);
+		if (initial)
+		{
+			res_stat = cur_stat;
+			initial = false;
+		}
+		else if (res_stat != cur_stat)
+		{
+			res_stat = SimpleWFA::ASSOCIATED_DUNNO;
 			break;
 		}
 	}
 
-	switch (res_stat) {
-		case SimpleWFA::ASSOCIATED_AFF:
-			orig_state=Qt::Checked;
-			break;
-		case SimpleWFA::ASSOCIATED_NEG:
-			orig_state=Qt::Unchecked;
-			break;
-		case SimpleWFA::ASSOCIATED_DUNNO:
-			orig_state=Qt::PartiallyChecked;
-			break;
+	switch (res_stat)
+	{
+	case SimpleWFA::ASSOCIATED_AFF:
+		orig_state = Qt::Checked;
+		break;
+	case SimpleWFA::ASSOCIATED_NEG:
+		orig_state = Qt::Unchecked;
+		break;
+	case SimpleWFA::ASSOCIATED_DUNNO:
+		orig_state = Qt::PartiallyChecked;
+		break;
 	}
 
 	setCheckState(orig_state);
 }
 
-void AssocListWidget::Process(const QString &file_path)
+void AssocListWidget::Process(const QString& file_path)
 {
-	bool changed=orig_state!=checkState();
+	bool changed = orig_state != checkState();
 
-	if (!remove&&changed&&checkState()==Qt::Checked) {
-		foreach (const QString &ext, extensions) {
+	if (!remove && changed && checkState() == Qt::Checked)
+	{
+		for (const QString& ext: extensions)
+		{
 			SimpleWFA::Associate(hklm, ext.toStdWString().c_str(), prog_id.toStdWString().c_str());
 		}
 		SimpleWFA::CreateSimpleProgID(hklm, SimpleWFA::CD_UPDATE_ALWAYS, prog_id.toStdWString().c_str(), file_path.toStdWString().c_str(), desc.toStdWString().c_str(), icon);
 	}
-	
-	if (remove||(changed&&checkState()==Qt::Unchecked)) {
-		foreach (const QString &ext, extensions) {
+
+	if (remove || (changed && checkState() == Qt::Unchecked))
+	{
+		for (const QString& ext: extensions)
+		{
 			SimpleWFA::Deassociate(hklm, ext.toStdWString().c_str(), prog_id.toStdWString().c_str());
 		}
 	}
 
-	if (remove) {
+	if (remove)
+	{
 		SimpleWFA::RemoveProgID(hklm, prog_id.toStdWString().c_str());
 	}
 }
 
 void AssocListWidget::SetRemove(int state)
 {
-	remove=state;
+	remove = state;
 
 	if (remove)
 		setFlags(Qt::ItemIsUserCheckable);
 	else
-		setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+		setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 }
 
-ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
+ZDLFileAssociations::ZDLFileAssociations(QWidget* parent) :
 	QDialog(parent)
 {
 	setWindowTitle("File associations");
-	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
-	QVBoxLayout *main_layout=new QVBoxLayout(this);
-	QHBoxLayout *buttons=new QHBoxLayout();
-	assoc_list=new QListWidget(this);
-		
-	QPushButton *btn_ok=new QPushButton("OK", this);
-	QPushButton *btn_cancel=new QPushButton("Cancel", this);
-	QCheckBox *chk_clear=new QCheckBox("Remove all association data", this);
-	QLabel *desc=new QLabel("Associate ZDL with following file types", this);
-	
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	QVBoxLayout * main_layout = new QVBoxLayout(this);
+	QHBoxLayout * buttons = new QHBoxLayout();
+	assoc_list = new QListWidget(this);
+
+	QPushButton* btn_ok = new QPushButton("OK", this);
+	QPushButton* btn_cancel = new QPushButton("Cancel", this);
+	QCheckBox * chk_clear = new QCheckBox("Remove all association data", this);
+	QLabel* desc = new QLabel("Associate ZDL with following file types", this);
+
 	buttons->addStretch();
 	buttons->addWidget(btn_ok);
 	buttons->addWidget(btn_cancel);
 	buttons->setSpacing(4);
-	buttons->setContentsMargins(0,0,0,0);
+	buttons->setContentsMargins(0, 0, 0, 0);
 
-	bool hklm=SimpleWFA::CheckIfLocalMachineAvailable();
+	bool hklm = SimpleWFA::CheckIfLocalMachineAvailable();
 
 	//Font on all icons is "Small Fonts" size 7
 	assoc_list->addItem(new AssocListWidget("ZDL files (*.zdl)", assoc_list, "ZDL.Zdl.1", "ZDL config file", ".zdl", hklm, IDI_SAVE));
@@ -132,12 +143,12 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 	main_layout->addLayout(buttons);
 	main_layout->setSpacing(4);
 
-	setContentsMargins(4,4,4,4);
-	layout()->setContentsMargins(0,0,0,0);
+	setContentsMargins(4, 4, 4, 4);
+	layout()->setContentsMargins(0, 0, 0, 0);
 	setFixedHeight(sizeHint().height());
 	setFixedWidth(400);
 	resize(400, sizeHint().height());
-	
+
 	connect(btn_ok, SIGNAL(clicked()), this, SLOT(ApplyAssociations()));
 	connect(chk_clear, SIGNAL(stateChanged(int)), this, SLOT(ClearStateChanged(int)));
 	connect(btn_cancel, SIGNAL(clicked()), this, SLOT(reject()));
@@ -145,9 +156,9 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 
 void ZDLFileAssociations::ApplyAssociations()
 {
-	QString file_path=QDir::toNativeSeparators(ZDLConfigurationManager::getExec());
+	QString file_path = QDir::toNativeSeparators(ZDLConfigurationManager::getExec());
 
-	for(int i=0; i<assoc_list->count(); i++)
+	for (int i = 0; i < assoc_list->count(); i++)
 		((AssocListWidget*)assoc_list->item(i))->Process(file_path);
 
 	SimpleWFA::NotifyShell();
@@ -158,7 +169,7 @@ void ZDLFileAssociations::ApplyAssociations()
 void ZDLFileAssociations::ClearStateChanged(int state)
 {
 	assoc_list->setUpdatesEnabled(false);
-	for(int i=0; i<assoc_list->count(); i++)
+	for (int i = 0; i < assoc_list->count(); i++)
 		((AssocListWidget*)assoc_list->item(i))->SetRemove(state);
 	assoc_list->setUpdatesEnabled(true);
 }

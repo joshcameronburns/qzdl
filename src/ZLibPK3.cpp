@@ -79,14 +79,14 @@ QStringList ZLibPK3::getMapNames()
 				{
 					QByteArray char_buf = QByteArray::fromRawData((const char*)buf, (qsizetype)buf_len);
 
-						foreach (const QString& str, QString(char_buf).split(QRegularExpression("[\r\n]"), Qt::SkipEmptyParts))
-						{
-							QRegularExpression name_re(R"(^\s*map\s+([^\s]+)(\s+.*)?$)");
-							QRegularExpressionMatch match = name_re.match(str, Qt::CaseInsensitive);
+					for (const QString& str: QString(char_buf).split(QRegularExpression("[\r\n]"), Qt::SkipEmptyParts))
+					{
+						QRegularExpression name_re(R"(^\s*map\s+([^\s]+)(\s+.*)?$)");
+						QRegularExpressionMatch match = name_re.match(str, Qt::CaseInsensitive);
 
-							if (match.hasPartialMatch())
-								map_names << match.captured(1).left(8).toUpper();
-						}
+						if (match.hasPartialMatch())
+							map_names << match.captured(1).left(8).toUpper();
+					}
 
 					mz_free(buf);
 				}

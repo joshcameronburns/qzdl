@@ -192,11 +192,11 @@ void ZDLMultiPane::VerbosePopup()
 		QDir save_dir(save_path);
 		QFileInfoList saves = save_dir.entryInfoList(filter);
 
-			foreach (const QFileInfo& sfi, saves)
-			{
-				if (sfi.isFile())
-					savegame->addItem(sfi.fileName(), sfi.absoluteFilePath());
-			}
+		for (const QFileInfo& sfi: saves)
+		{
+			if (sfi.isFile())
+				savegame->addItem(sfi.fileName(), sfi.absoluteFilePath());
+		}
 	}
 
 	int idx;

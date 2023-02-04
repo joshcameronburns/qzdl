@@ -420,7 +420,7 @@ int ZDLConf::getFlagsForValue(const QString& lsection, const QString& var)
 	readLock();
 	for (auto section : sections)
 	{
-			if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
+		if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
 		{
 			releaseReadLock();
 			return section->getFlagsForValue(var);
@@ -435,7 +435,7 @@ bool ZDLConf::setFlagsForValue(const QString& lsection, const QString& var, int 
 	readLock();
 	for (auto section : sections)
 	{
-			if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
+		if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
 		{
 			releaseReadLock();
 			return section->setFlagsForValue(var, value);
@@ -450,7 +450,7 @@ bool ZDLConf::deleteRegex(const QString& lsection, const QString& regex)
 	readLock();
 	for (auto section : sections)
 	{
-			if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
+		if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0)
 		{
 			bool rc = section->deleteRegex(regex);
 			releaseReadLock();
@@ -459,7 +459,6 @@ bool ZDLConf::deleteRegex(const QString& lsection, const QString& regex)
 	}
 	releaseReadLock();
 	return false;
-
 }
 
 

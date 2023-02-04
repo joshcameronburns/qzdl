@@ -511,7 +511,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 
 	if(pwads.size() > 0){
 		args.append(" -file");
-		foreach (const QString &str, pwads) {
+		for (const QString& str: pwads) {
 			args.append(' ');
 			args.append(QuoteParam(IF_NATIVE_SEP(str)));
 		}
@@ -519,12 +519,12 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 
 	do {
 		if (deh_last%2) {
-			foreach (const QString &str, bexs) {
+			for (const QString& str: bexs) {
 				args.append(" -bex ");
 				args.append(QuoteParam(IF_NATIVE_SEP(str)));
 			}
 		} else {
-			foreach (const QString &str, dehs) {
+			for (const QString& str: dehs) {
 				args.append(" -deh ");
 				args.append(QuoteParam(IF_NATIVE_SEP(str)));
 			}
@@ -532,12 +532,12 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 		deh_last+=3;
 	} while (deh_last<=4);
 
-	foreach (const QString &str, autoexecs) {
+	for (const QString& str: autoexecs) {
 		args.append(" +exec ");
 		args.append(QuoteParam(IF_NATIVE_SEP(str)));
 	}
 
-	foreach (const QString &str, lumps) {
+	for (const QString& str: lumps) {
 		args.append(" -playdemo ");
 		args.append(QuoteParam(IF_NATIVE_SEP(str)));
 	}
@@ -773,40 +773,40 @@ QStringList ZDLMainWindow::getArgumentsList()
 	if (!pwads.empty())
 	{
 		args << "-file";
-			foreach (const QString& str, pwads)
-			{
-				args << str;
-			}
+		for (const QString& str: pwads)
+		{
+			args << str;
+		}
 	}
 
 	do
 	{
 		if (deh_last % 2)
 		{
-				foreach (const QString& str, bexs)
-				{
-					args << "-bex" << str;
-				}
+			for (const QString& str: bexs)
+			{
+				args << "-bex" << str;
+			}
 		}
 		else
 		{
-				foreach (const QString& str, dehs)
-				{
-					args << "-deh" << str;
-				}
+			for (const QString& str: dehs)
+			{
+				args << "-deh" << str;
+			}
 		}
 		deh_last += 3;
 	} while (deh_last <= 4);
 
-		foreach (const QString& str, autoexecs)
-		{
-			args << "+exec" << str;
-		}
+	for (const QString& str: autoexecs)
+	{
+		args << "+exec" << str;
+	}
 
-		foreach (const QString& str, lumps)
-		{
-			args << "-playdemo" << str;
-		}
+	for (const QString& str: lumps)
+	{
+		args << "-playdemo" << str;
+	}
 
 	if (zconf->hasValue("zdl.save", "gametype"))
 	{
@@ -920,20 +920,20 @@ QString ZDLMainWindow::getArgumentsString([[maybe_unused]] bool native_sep)
 {
 	QString args;
 
-		foreach (const QString& str, getArgumentsList())
+	for (const QString& str: getArgumentsList())
+	{
+		if (str.indexOf(QRegularExpression("\\s")) != -1)
 		{
-			if (str.indexOf(QRegularExpression("\\s")) != -1)
-			{
-				args.append('"');
-				args.append(str);
-				args.append('"');
-			}
-			else
-			{
-				args.append(str);
-			}
-			args.append(' ');
+			args.append('"');
+			args.append(str);
+			args.append('"');
 		}
+		else
+		{
+			args.append(str);
+		}
+		args.append(' ');
+	}
 
 	return args;
 }
