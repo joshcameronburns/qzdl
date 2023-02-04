@@ -68,7 +68,7 @@ ZDLFileList::ZDLFileList(ZDLWidget* parent) :
 void ZDLFileList::newDrop(const QStringList& fileList)
 {
 	LOGDATAO() << "newDrop" << Qt::endl;
-	for (const auto& i: fileList)
+	for (const QString& i: fileList)
 		insert(new ZDLFileListable(pList, 1001, i), -1);
 }
 
@@ -82,7 +82,7 @@ void ZDLFileList::newConfig()
 	{
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+d?$", vctr);
-		for (auto& i: vctr)
+		for (ZDLLine* i: vctr)
 		{
 			auto* zList = new ZDLFileListable(pList, 1001, i->getValue());
 			if (i->getVariable().endsWith("d", Qt::CaseInsensitive))
@@ -139,7 +139,7 @@ void ZDLFileList::addButton()
 		"All files (" QFD_FILTER_ALL ")";
 
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add files", getWadLastDir(), filters);
-	for (const auto& fileName: fileNames)
+	for (const QString& fileName: fileNames)
 	{
 		LOGDATAO() << "Adding file " << fileName << Qt::endl;
 		saveWadLastDir(fileName);
@@ -166,16 +166,19 @@ void ZDLFileList::editButton(const QList<QListWidgetItem*>& items)
 	QList<QListWidgetItem*> en_items;
 	bool disable_all = true;
 
-		foreach (QListWidgetItem* item, items)
+	for (QListWidgetItem* item: items)
+	{
+		if (!item->font().strikeOut())
 		{
-			if (!item->font().strikeOut())
-			{
-				en_items.append(item);
-				disable_all = false;
-			}
+			en_items.append(item);
+			disable_all = false;
 		}
+	}
 
-		foreach (QListWidgetItem* item, disable_all ? items : en_items) editButton(item);
+	for (QListWidgetItem* item: (disable_all ? items : en_items))
+	{
+		editButton(item);
+	}
 }
 
 void ZDLFileList::editButton()

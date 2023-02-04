@@ -37,8 +37,8 @@ void clearFiles(ZDLConf* zconf)
 	{
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+d?$", vctr);
-		
-		for (auto & i : vctr)
+
+		for (auto& i: vctr)
 		{
 			zconf->deleteValue("zdl.save", i->getVariable());
 		}
@@ -62,7 +62,7 @@ void addFile(const QString& file, ZDLConf* zconf)
 		return;
 	}
 	QVector<int> numbers;
-	for (auto & i : vctr)
+	for (auto& i: vctr)
 	{
 		bool ok = false;
 		QString value = i->getVariable();
@@ -226,39 +226,40 @@ int main(int argc, char** argv)
 
 	bool clear_on_args = true;
 	bool hasZDLFile = false;
-		foreach (const QString& item, eatenArgs)
-		{
-			if (item.endsWith(".zdl", Qt::CaseInsensitive))
-			{
-				LOGDATA() << "Found a .zdl on the command line, replacing current zdl.save" << Qt::endl;
-				tconf->deleteSectionByName("zdl.save");
-				ZDLConf zdlFile;
-				zdlFile.readINI(item);
-				ZDLSection* section = zdlFile.getSection("zdl.save");
-				if (section)
-				{
-					tconf->addSection(section->clone());
-					hasZDLFile = true;
-					clear_on_args = false;
-				}
-				break;
-			}
-		}
 
-		foreach (const QString& item, eatenArgs)
+	for (const QString& item: eatenArgs)
+	{
+		if (item.endsWith(".zdl", Qt::CaseInsensitive))
 		{
-			if (item.endsWith(".zdl", Qt::CaseInsensitive) || item.endsWith(".ini", Qt::CaseInsensitive)
-				|| item.startsWith("-"))
-				continue;
-
-			if (clear_on_args)
+			LOGDATA() << "Found a .zdl on the command line, replacing current zdl.save" << Qt::endl;
+			tconf->deleteSectionByName("zdl.save");
+			ZDLConf zdlFile;
+			zdlFile.readINI(item);
+			ZDLSection* section = zdlFile.getSection("zdl.save");
+			if (section)
 			{
-				clearFiles(tconf);
+				tconf->addSection(section->clone());
+				hasZDLFile = true;
 				clear_on_args = false;
 			}
-
-			addFile(item, tconf);
+			break;
 		}
+	}
+
+	for (const QString& item: eatenArgs)
+	{
+		if (item.endsWith(".zdl", Qt::CaseInsensitive) || item.endsWith(".ini", Qt::CaseInsensitive)
+			|| item.startsWith("-"))
+			continue;
+
+		if (clear_on_args)
+		{
+			clearFiles(tconf);
+			clear_on_args = false;
+		}
+
+		addFile(item, tconf);
+	}
 
 	mw = new ZDLMainWindow();
 	mw->show();
@@ -327,4 +328,3 @@ int main(int argc, char** argv)
 	LOGDATA() << "ZDL QUIT" << Qt::endl;
 	return ret;
 }
-

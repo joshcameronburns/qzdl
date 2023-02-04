@@ -110,7 +110,7 @@ void ZDLSourcePortList::rebuild()
 void ZDLSourcePortList::newDrop(const QStringList& fileList)
 {
 	LOGDATAO() << "newDrop" << Qt::endl;
-	for (const auto& i: fileList)
+	for (const QString& i: fileList)
 		insert(new ZDLNameListable(pList, 1001, i, ZDLAppInfo(i).GetFileDescription()), -1);
 }
 
@@ -119,7 +119,7 @@ void ZDLSourcePortList::addButton()
 	LOGDATAO() << "Adding new source ports" << Qt::endl;
 
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), src_filters);
-	for (const auto& fileName: fileNames)
+	for (const QString& fileName: fileNames)
 	{
 		LOGDATAO() << "Adding file " << fileName << Qt::endl;
 		saveSrcLastDir(fileName);
