@@ -37,17 +37,18 @@ but there is a QT5 option provided for convenient setup. To generate a Qt5 build
 you can set the variable during setup:
 
 	cmake .. -DQT5=ON
- 
+
+Built binaries will be placed in a "bin" folder in the configured with CMake directory.
+
   3.1.1 Compilation on Windows
   ----------------------------
 Create a build directory in the repository root, enter it then configure with CMake:
 
 	mkdir build
 	cd build
-	cmake .. -G "{Your VS version}" -DCMAKE_PREFIX_PATH="{Path to qt installation}" -DCMAKE_CXX_FLAGS="/MP"
+	cmake .. -G "{Your VS version}" -DCMAKE_PREFIX_PATH="{Path to qt installation}"
 
-Note that without -DCMAKE_CXX_FLAGS="/MP" the build will be single threaded and 
-very slow. To know which version to pass to -G you can consult:
+To know which version to pass to -G you can consult:
 
 	https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html#visual-studio-generators
 
@@ -61,8 +62,8 @@ This will copy over the required Dlls.
   3.1.2 Static Compilation on Windows
   -----------------------------------
 For a static windows build you need to link with a static build of qtbase.
-The easiest way to do this is through vcpkg. The following is an example
-for 64 bit builds:
+The easiest way to do this is through vcpkg. The CMake flag MSVC_STATIC
+is provided for convenient setup. The following is an example for x64 builds:
 
   VCPKG:
 	git clone https://github.com/Microsoft/vcpkg.git  (in a suitable dir)
@@ -75,16 +76,10 @@ for 64 bit builds:
 	mkdir build
     cd build
     cmake .. -G "Visual Studio 17 2022" \
-    -A x64 \
-    -DCMAKE_TOOLCHAIN_FILE="{vcpkg directory from previous step}\scripts\buildsystems\vcpkg.cmake" \
-    -DCMAKE_CXX_FLAGS="/MT /MP" \
-    -DVCPKG_TARGET_TRIPLET=x64-windows-static
-    
-Note that if the /MT flag is not set correctly you can do so manually
-by right clicking the project in solution explorer then Properties > 
-C/C++ > Code Generation and changing the Runtime Library property.
-If the /MP flag is not set correctly you can do so manually to speed
-up compilation. The /MT flag is needed for static builds.
+        -A x64 \
+        -DMSVC_STATIC=ON \
+        -DCMAKE_TOOLCHAIN_FILE="{vcpkg directory from previous step}\scripts\buildsystems\vcpkg.cmake" \
+        -DVCPKG_TARGET_TRIPLET=x64-windows-static
 
 For 32bit builds you can set the CMake platform to Win32 with -A Win32.
 The 32bit triplet is x86-windows-static.
