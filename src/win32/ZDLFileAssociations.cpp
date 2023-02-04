@@ -24,10 +24,10 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QLabel>
-#include "ZDLConfigurationManager.h"
+#include "../ZDLConfigurationManager.h"
 #include "ZDLFileAssociations.h"
 #include "SimpleWFA.h"
-#include "zdlcommon.h"
+#include "../zdlcommon.h"
 #include "resource.h"
 
 AssocListWidget::AssocListWidget(const QString& text, QListWidget* parent, const QString& prog_id, const QString& desc, const QString& exts, bool hklm, UINT icon)

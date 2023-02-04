@@ -32,81 +32,83 @@ else()
 endif()
 
 list(APPEND EXEC
-        miniz/miniz.h
-        include/libwad.h
-        include/ZDLAboutDialog.h
-        include/zdlcommon.h
-        include/zdlconf.hpp
-        include/ZDLConfiguration.h
-        include/ZDLConfigurationManager.h
-        include/ZDLFileInfo.h
-        include/ZDLFileList.h
-        include/ZDLFileListable.h
-        include/ZDLFilePane.h
-        include/ZDLImportDialog.h
-        include/ZDLInterface.h
-        include/ZDLIWadList.h
-        include/zdlline.hpp
-        include/ZDLListable.h
-        include/ZDLListEntry.hpp
-        include/ZDLListWidget.h
-        include/ZDLMainWindow.h
-        include/ZDLMapFile.h
-        include/ZDLMultiPane.h
-        include/ZDLNameInput.h
-        include/ZDLNameListable.h
-        include/ZDLNullDevice.h
-        include/ZDLQSplitter.h
-        include/zdlsection.hpp
-        include/ZDLSettingsPane.h
-        include/ZDLSettingsTab.h
-        include/ZDLSourcePortList.h
-        include/ZDLWidget.h
-        include/ZLibDir.h
-        include/ZLibPK3.h
-        miniz/miniz.c
+        external/miniz/miniz.h
+        external/miniz/miniz.c
+        src/config.h
+        src/libwad.h
         src/libwad.cpp
         src/qzdl.cpp
+        src/ZDLAboutDialog.h
         src/ZDLAboutDialog.cpp
-        src/zdlconf.cpp
+        src/zdlcommon.h
+        src/ZDLConfiguration.h
         src/ZDLConfiguration.cpp
+        src/zdlconf.hpp
+        src/zdlconf.cpp
+        src/ZDLConfigurationManager.h
         src/ZDLConfigurationManager.cpp
+        src/ZDLFileInfo.h
         src/ZDLFileInfo.cpp
+        src/ZDLFileList.h
         src/ZDLFileList.cpp
+        src/ZDLFileListable.h
         src/ZDLFileListable.cpp
+        src/ZDLFilePane.h
         src/ZDLFilePane.cpp
+        src/ZDLImportDialog.h
         src/ZDLImportDialog.cpp
+        src/ZDLInterface.h
         src/ZDLInterface.cpp
+        src/ZDLIWadList.h
         src/ZDLIWadList.cpp
+        src/zdlline.hpp
         src/zdlline.cpp
+        src/ZDLListable.h
         src/ZDLListable.cpp
+        src/ZDLListEntry.hpp
         src/ZDLListEntry.cpp
+        src/ZDLListWidget.h
         src/ZDLListWidget.cpp
+        src/ZDLMainWindow.h
         src/ZDLMainWindow.cpp
+        src/ZDLMapFile.h
         src/ZDLMapFile.cpp
+        src/ZDLMultiPane.h
         src/ZDLMultiPane.cpp
+        src/ZDLNameInput.h
         src/ZDLNameInput.cpp
+        src/ZDLNameListable.h
         src/ZDLNameListable.cpp
+        src/ZDLNullDevice.h
+        src/ZDLQSplitter.h
         src/ZDLQSplitter.cpp
+        src/zdlsection.hpp
         src/zdlsection.cpp
+        src/ZDLSettingsPane.h
         src/ZDLSettingsPane.cpp
+        src/ZDLSettingsTab.h
         src/ZDLSettingsTab.cpp
+        src/ZDLSourcePortList.h
         src/ZDLSourcePortList.cpp
+        src/ZDLWidget.h
         src/ZDLWidget.cpp
+        src/ZLibDir.h
         src/ZLibDir.cpp
+        src/ZLibPK3.h
         src/ZLibPK3.cpp)
 
 list(APPEND INCL
         include
-        miniz
+        external/miniz
+        external/rapidjson
         res/XPM)
 
 if (WIN32)
     list(APPEND EXEC
-            SimpleWFA/SimpleWFA.h
-            include/ZDLFileAssociations.h
-            SimpleWFA/SimpleWFA.cpp
-            src/ZDLFileAssociations.cpp)
+            src/win32/SimpleWFA.h
+            src/win32/SimpleWFA.cpp
+            src/win32/ZDLFileAssociations.h
+            src/win32/ZDLFileAssociations.cpp)
 
     list(APPEND INCL
             res/Win32
