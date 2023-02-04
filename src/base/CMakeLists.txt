@@ -1,10 +1,11 @@
 add_library(qzdl_base STATIC
         external/miniz/miniz.h
         external/miniz/miniz.c
+        zdlcommon.h
+        resource.h
         #config.h
         libwad.cpp
         libwad.h
-        zdlcommon.h
         zdlconf.cpp
         zdlconf.hpp
         ZDLConfiguration.cpp

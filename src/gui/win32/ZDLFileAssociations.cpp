@@ -25,7 +25,7 @@
 #include "gui/ZDLConfigurationManager.h"
 #include "ZDLFileAssociations.h"
 #include "SimpleWFA.h"
-#include "res/resource.h"
+#include "base/resource.h"
 
 AssocListWidget::AssocListWidget(const QString& text, QListWidget* parent, const QString& prog_id, const QString& desc, const QString& exts, bool hklm, UINT icon)
 	:
