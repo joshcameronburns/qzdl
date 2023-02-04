@@ -27,7 +27,7 @@
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLImportDialog.h"
-#include "ZDLMapFile.h"
+#include "base/ZDLMapFile.h"
 
 #ifdef _WIN32
 #include <windows.h>

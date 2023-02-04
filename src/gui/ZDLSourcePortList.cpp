@@ -22,7 +22,7 @@
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
-#include "ZDLFileInfo.h"
+#include "base/ZDLFileInfo.h"
 #include "gph_ast.xpm"
 
 #if defined(_WIN32)

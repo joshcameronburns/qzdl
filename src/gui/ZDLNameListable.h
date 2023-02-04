@@ -19,7 +19,7 @@
 #pragma once
 
 #include "ZDLListable.h"
-#include "zdlconf.hpp"
+#include "base/zdlconf.hpp"
 
 class ZDLNameListable : public ZDLListable
 {

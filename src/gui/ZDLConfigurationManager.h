@@ -22,8 +22,8 @@
 #include <QComboBox>
 #include <QValidator>
 #include "ZDLWidget.h"
-#include "ZDLConfiguration.h"
-#include "zdlcommon.h"
+#include "base/ZDLConfiguration.h"
+#include "base/zdlcommon.h"
 
 class ZDLConfigurationManager{
 	public:

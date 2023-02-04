@@ -18,17 +18,14 @@
  */
 
 #include <iterator>
-#include <sstream>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QCheckBox>
 #include <QLabel>
-#include "../ZDLConfigurationManager.h"
+#include "gui/ZDLConfigurationManager.h"
 #include "ZDLFileAssociations.h"
 #include "SimpleWFA.h"
-#include "../zdlcommon.h"
-#include "resource.h"
+#include "res/resource.h"
 
 AssocListWidget::AssocListWidget(const QString& text, QListWidget* parent, const QString& prog_id, const QString& desc, const QString& exts, bool hklm, UINT icon)
 	:

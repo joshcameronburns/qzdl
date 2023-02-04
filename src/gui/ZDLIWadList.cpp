@@ -18,12 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QFileDialog>
-#include "zdlcommon.h"
+#include "base/zdlcommon.h"
 #include "ZDLIWadList.h"
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
-#include "ZDLFileInfo.h"
+#include "base/ZDLFileInfo.h"
 #include "gph_ast.xpm"
 
 const QString iwad_filters =

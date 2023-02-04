@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QVBoxLayout>
-#include "ZDLMapFile.h"
+#include "base/ZDLMapFile.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLSettingsPane.h"
 
