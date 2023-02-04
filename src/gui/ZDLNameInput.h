@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include "ZDLNameListable.h"
-#include "ZDLFileInfo.h"
+#include "base/ZDLFileInfo.h"
 
 class ZDLNameInput : public QDialog
 {

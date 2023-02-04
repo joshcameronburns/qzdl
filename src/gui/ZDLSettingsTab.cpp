@@ -25,8 +25,7 @@
 #include "ZDLQSplitter.h"
 
 #if defined(_WIN32) && !defined(_ZDL_NO_WFA)
-#include <windows.h>
-#include "ZDLFileAssociations.h"
+#include "win32/ZDLFileAssociations.h"
 #endif
 
 ZDLSettingsTab::ZDLSettingsTab(QWidget* parent) : ZDLWidget(parent)

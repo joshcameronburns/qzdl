@@ -20,9 +20,9 @@
 
 #include <QApplication>
 #include <QDir>
-#include "ZDLConfigurationManager.h"
-#include "ZDLMainWindow.h"
-#include "ZDLNullDevice.h"
+#include "base/ZDLNullDevice.h"
+#include "gui/ZDLConfigurationManager.h"
+#include "gui/ZDLMainWindow.h"
 
 #if defined(_WIN32)
 #include "windows.h"
