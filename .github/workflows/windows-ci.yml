@@ -1,5 +1,5 @@
 name: Windows
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   ci:
@@ -59,8 +59,8 @@ jobs:
         run: |
           cmake `
             -B build `
-            -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Debug `
+            -G "Visual Studio 17 2022" `
+            -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static-release
           cmake --build build --parallel
