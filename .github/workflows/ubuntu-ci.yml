@@ -21,7 +21,7 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.version }}
-          archives: qtbase
+          archives: icu qtbase
 
       - name: Build qzdl
         run: |

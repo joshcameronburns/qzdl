@@ -60,7 +60,7 @@ jobs:
           cmake `
             -B build `
             -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_BUILD_TYPE=Debug `
             -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static-release
           cmake --build build --parallel
@@ -68,7 +68,7 @@ jobs:
       - name: Prepare build artifacts
         run: |
           mkdir upload
-          copy build/bin/Release/qzdl.exe upload
+          copy build/bin/Debug/qzdl.exe upload
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
