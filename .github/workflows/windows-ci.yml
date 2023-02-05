@@ -1,5 +1,4 @@
 name: Windows
-
 on: [pull_request, push]
 
 jobs:
@@ -61,14 +60,15 @@ jobs:
           cmake `
             -B build `
             -G "Visual Studio 17 2022" `
+            -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static-release
-          cmake --build build
+          cmake --build build --parallel
 
       - name: Prepare build artifacts
         run: |
           mkdir upload
-          copy build/bin/qzdl.exe upload
+          copy build/bin/Release/qzdl.exe upload
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
