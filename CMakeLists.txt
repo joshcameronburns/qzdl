@@ -22,7 +22,7 @@ if(MSVC)
 
     add_link_options("$<$<CONFIG:RELEASE>:/LTCG>")
 else()
-    add_compile_options("-Wall" "-Wextra" "-Werror" "-fstack-protector-strong" "$<$<CONFIG:RELEASE>:-O3>")
+    add_compile_options("-Wall" "-Wextra" "-Werror" "-fstack-protector-strong" "$<$<CONFIG:RELEASE>:-O3;-DNDEBUG>")
 endif()
 
 if (QT5)
