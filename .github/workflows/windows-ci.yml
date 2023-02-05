@@ -53,7 +53,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: "6.4.0"
+          version: "6.2.0"
           archives: qtbase
 
       - name: Build qBittorrent
@@ -73,5 +73,5 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: qzdl-win-x64-qt${{ qt_version }}
+          name: qzdl-win-x64-qt6.2.0
           path: upload

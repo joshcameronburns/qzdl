@@ -4,10 +4,14 @@ on: [pull_request, push]
 jobs:
   ci:
     name: Build
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
-      qt_version: "6.2.0"
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-22.04
+        version:
+          - "6.2.0"
 
     steps:
       - name: Checkout repository
@@ -16,7 +20,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: ${{ qt_version }}
+          version: ${{ matrix.version }}
           archives: qtbase
 
       - name: Build qzdl
@@ -32,5 +36,5 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: qzdl-linux-x64-qt${{ qt_version }}
+          name: qzdl-linux-x64-qt${{ matrix.version }}
           path: upload
