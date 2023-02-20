@@ -2,6 +2,7 @@
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
  * Copyright (C) 2019  Lcferrum
+ * Copyright (C) 2023  spacebub
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +17,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include <QtGui>
-#include <QApplication>
-#include <QListWidget>
 
+#include <QApplication>
+#include <QLabel>
 #include "ZDLListWidget.h"
 #include "ZDLFilePane.h"
 
-
-ZDLFilePane::ZDLFilePane(QWidget *parent):ZDLWidget(parent){
-	QVBoxLayout *box = new QVBoxLayout(this);
+ZDLFilePane::ZDLFilePane(QWidget* parent) : ZDLWidget(parent)
+{
+	auto* box = new QVBoxLayout(this);
 	box->setSpacing(2);
 
-	box->addWidget(new QLabel("External files",this));
+	box->addWidget(new QLabel("External files", this));
 
 	fList = new ZDLFileList(this);
 	fList->doDragDrop(true);
 	box->addWidget(fList);
-	setContentsMargins(0,0,0,0);
-	layout()->setContentsMargins(0,0,0,0);
-	
+	setContentsMargins(0, 0, 0, 0);
+	layout()->setContentsMargins(0, 0, 0, 0);
 }
 
-void ZDLFilePane::rebuild(){
-	//std::cout << "Rebuilding config" << std::endl;
+void ZDLFilePane::rebuild()
+{
 }

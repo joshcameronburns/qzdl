@@ -1,3 +1,13 @@
+2023-02-01 spacebub
+
+	* Release 3-2.0
+	* Changed:
+		- Migrate project to CMake
+		- Migrate project to Qt6
+		- Various code improvements/refactor.
+	* Fixed:
+		- Modern linux and windows builds
+
 2019-05-02  Lcferrum <lcferrum@yandex.com>
 
 	* Release 3-1.1
