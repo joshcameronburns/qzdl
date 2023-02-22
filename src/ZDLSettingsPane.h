@@ -42,6 +42,7 @@ class ZDLSettingsPane : public ZDLWidget
  protected:
 	static QStringList getFilesMaps();
 	QComboBox* diffList;
+	QComboBox* monstersList;
 	QComboBox* sourceList;
 	QListWidget* IWADList;
 	QComboBox* warpCombo;
