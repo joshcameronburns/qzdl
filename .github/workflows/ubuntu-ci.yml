@@ -31,7 +31,7 @@ jobs:
       - name: Prepare build artifacts
         run: |
           mkdir upload
-          cp build/bin/qzdl upload
+          cp build/bin/ZDL upload
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3

@@ -68,7 +68,7 @@ jobs:
       - name: Prepare build artifacts
         run: |
           mkdir upload
-          copy build/bin/Debug/qzdl.exe upload
+          copy build/bin/Debug/ZDL.exe upload
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
