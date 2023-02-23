@@ -1,10 +1,17 @@
+2023-02-23 Release 3-2.1
+
+	* Added:
+		- New dropdown for no, fast or respawning monsters
+	* Fixed:
+		- Deathmatch launch command
+
 2023-02-01 spacebub
 
 	* Release 3-2.0
 	* Changed:
 		- Migrate project to CMake
 		- Migrate project to Qt6
-		- Various code improvements/refactor.
+		- Various code improvements/refactor
 	* Fixed:
 		- Modern linux and windows builds
 
