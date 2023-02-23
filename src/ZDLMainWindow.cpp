@@ -707,7 +707,15 @@ QStringList ZDLMainWindow::getArgumentsList()
 	}
 
 	if (zconf->hasValue("zdl.save", "monsters")){
-		args << zconf->getValue("zdl.save", "monsters");
+		int i_monsters = zconf->getValue("zdl.save", "monsters").toInt();
+		if (i_monsters > 0){
+			if (i_monsters == 1){
+				args << "-nomonsters";
+			} else {
+				if (i_monsters % 2 == 0) args << "-fast";
+				if (i_monsters >= 3) args << "-respawn";
+			}
+		}
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
