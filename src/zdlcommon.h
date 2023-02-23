@@ -23,9 +23,9 @@
 
 #define ZDL_FLAG_NAMELESS    0x00001
 
-#define ZDL_VERSION_STRING "3-2.0"
+#define ZDL_VERSION_STRING "3-2.1"
 #define ZDL_DEV_BUILD 1
-#define ZDL_PRIVATE_VERSION_STRING "3-2.0+spacebub"
+#define ZDL_PRIVATE_VERSION_STRING "3-2.1+spacebub"
 
 #ifdef _WIN32
 #define QFD_FILTER_DELIM    ";"
