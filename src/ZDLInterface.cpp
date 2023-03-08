@@ -297,11 +297,11 @@ void ZDLInterface::buttonPaneNewConfig()
 		{
 			if (i->getValue().compare("open", Qt::CaseInsensitive) == 0)
 			{
-				btnEpr->setIcon(QPixmap(glyph_up_trg));
+				btnEpr->setIcon(QPixmap(glyph_down_trg));
 			}
 			else
 			{
-				btnEpr->setIcon(QPixmap(glyph_down_trg));
+				btnEpr->setIcon(QPixmap(glyph_up_trg));
 			}
 		}
 		if (vctr.empty())
