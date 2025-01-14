@@ -59,7 +59,7 @@ void ZDLLine::setIsCopy(bool val)
 
 QString ZDLLine::getValue()
 {
-	return QFD_QT_SEP(value);;
+	return QFD_QT_SEP(value);
 }
 
 QString ZDLLine::getVariable()

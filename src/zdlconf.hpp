@@ -45,7 +45,6 @@ class ZDLConf
 	void deleteValue(const QString& lsection, const QString& variable);
 	void setValue(const QString& lsection, const QString& variable, int value);
 	void setValue(const QString& lsection, const QString& variable, const QString& szBuffer);
-	int numberOfSections() const;
 	~ZDLConf();
 	explicit ZDLConf(int mode = ZDLConf::Default);
 	int reopen(int imode);

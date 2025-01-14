@@ -287,7 +287,7 @@ int main(int argc, char** argv)
 
 	mw->handleImport();
 	LOGDATA() << "-----------------------------------" << Qt::endl;
-	int ret = a.exec();
+	int ret = QApplication::exec();
 	LOGDATA() << "-----------------------------------" << Qt::endl;
 	LOGDATA() << "Starting shutdown" << Qt::endl;
 	if (ret != 0)

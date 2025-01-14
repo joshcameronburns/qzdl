@@ -20,12 +20,11 @@
 
 #include <QMetaObject>
 #include <QObject>
-#include <QtGui>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include "ZDLWidget.h"
 
-class ZDLQSplitter : public virtual ZDLWidget
+class ZDLQSplitter : public ZDLWidget
 {
  Q_OBJECT
  public:

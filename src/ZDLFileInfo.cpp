@@ -281,11 +281,15 @@ QString ZDLIwadInfo::GetFileDescription()
 		iwad_file.close();
 	}
 
-	ZDLMapFile* mapfile;
-	if (iwad_name.isEmpty() && (mapfile = ZDLMapFile::getMapFile(filePath())))
+	if (iwad_name.isEmpty())
 	{
-		iwad_name = mapfile->getIwadinfoName();
-		delete mapfile;
+        ZDLMapFile* mapfile = ZDLMapFile::getMapFile(filePath());
+        
+        if (mapfile)
+        {
+		    iwad_name = mapfile->getIwadinfoName();
+		    delete mapfile;
+        }
 	}
 
 	if (iwad_name.isEmpty())

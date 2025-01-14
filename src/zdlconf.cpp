@@ -76,13 +76,6 @@ int ZDLConf::readINI(const QString& file)
 	}
 }
 
-int ZDLConf::numberOfSections() const
-{
-	LOGDATAO() << "numberOfSections: " << sections.size();
-	return (int)sections.size();
-
-}
-
 int ZDLConf::writeINI(const QString& file)
 {
 	setValue("zdl.general", "conflib", "sunrise");
