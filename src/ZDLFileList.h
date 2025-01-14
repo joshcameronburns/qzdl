@@ -21,20 +21,29 @@
 
 #include "ZDLListWidget.h"
 
-class ZDLFileList : public ZDLListWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLFileList(ZDLWidget* parent);
- protected:
-	void editButton(QListWidgetItem* item) override;
-	virtual void editButton(const QList<QListWidgetItem*>& items);
-	void editButton() override;
-	void addButton() override;
-	void rebuild() override;
-	void newConfig() override;
-	void newDrop(const QStringList& fileList) override;
-	bool basic_fileopendialog;
- protected slots:
-	void folderButton();
+class ZDLFileList : public ZDLListWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLFileList(ZDLWidget *parent);
+
+protected:
+    void editButton(QListWidgetItem *item) override;
+
+    virtual void editButton(const QList<QListWidgetItem *> &items);
+
+    void editButton() override;
+
+    void addButton() override;
+
+    void rebuild() override;
+
+    void newConfig() override;
+
+    void newDrop(const QStringList &fileList) override;
+
+    bool basic_fileopendialog;
+protected slots:
+
+    void folderButton();
 };

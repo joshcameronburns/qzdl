@@ -22,271 +22,234 @@
 #include "ZDLConfigurationManager.h"
 #include "ico_icon.xpm"
 
-void ZDLConfigurationManager::init()
-{
-	activeConfig = nullptr;
-	cdir = "";
-	conf = new ZDLConfiguration();
+void ZDLConfigurationManager::init() {
+    activeConfig = nullptr;
+    cdir = "";
+    conf = new ZDLConfiguration();
 }
 
-ZDLConf* ZDLConfigurationManager::activeConfig;
+ZDLConf *ZDLConfigurationManager::activeConfig;
 QString ZDLConfigurationManager::cdir;
-ZDLWidget* ZDLConfigurationManager::zinterface;
+ZDLWidget *ZDLConfigurationManager::zinterface;
 QString ZDLConfigurationManager::filename;
-ZDLConfiguration* ZDLConfigurationManager::conf;
+ZDLConfiguration *ZDLConfigurationManager::conf;
 ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::why;
 QStringList ZDLConfigurationManager::argv;
 QString ZDLConfigurationManager::exec;
 
-void ZDLConfigurationManager::setExec(QString execu)
-{
-	ZDLConfigurationManager::exec = std::move(execu);
+void ZDLConfigurationManager::setExec(QString execu) {
+    ZDLConfigurationManager::exec = std::move(execu);
 }
 
-QString ZDLConfigurationManager::getExec()
-{
-	return ZDLConfigurationManager::exec;
+QString ZDLConfigurationManager::getExec() {
+    return ZDLConfigurationManager::exec;
 }
 
-QStringList ZDLConfigurationManager::getArgv()
-{
-	return ZDLConfigurationManager::argv;
+QStringList ZDLConfigurationManager::getArgv() {
+    return ZDLConfigurationManager::argv;
 }
 
-void ZDLConfigurationManager::setArgv(QStringList args)
-{
-	ZDLConfigurationManager::argv = std::move(args);
+void ZDLConfigurationManager::setArgv(QStringList args) {
+    ZDLConfigurationManager::argv = std::move(args);
 }
 
-void ZDLConfigurationManager::setWhy(ZDLConfigurationManager::WhyConfig whyConfig)
-{
-	ZDLConfigurationManager::why = whyConfig;
+void ZDLConfigurationManager::setWhy(ZDLConfigurationManager::WhyConfig whyConfig) {
+    ZDLConfigurationManager::why = whyConfig;
 }
 
-ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::getWhy()
-{
-	return ZDLConfigurationManager::why;
+ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::getWhy() {
+    return ZDLConfigurationManager::why;
 }
 
-void ZDLConfigurationManager::setInterface(ZDLWidget* widget)
-{
-	zinterface = widget;
-}
-ZDLWidget* ZDLConfigurationManager::getInterface()
-{
-	return zinterface;
+void ZDLConfigurationManager::setInterface(ZDLWidget *widget) {
+    zinterface = widget;
 }
 
-void ZDLConfigurationManager::setActiveConfiguration(ZDLConf* zconf)
-{
-	//cout << "Using new configuration" << Qt::endl;
-	ZDLConfigurationManager::activeConfig = zconf;
+ZDLWidget *ZDLConfigurationManager::getInterface() {
+    return zinterface;
 }
 
-ZDLConf* ZDLConfigurationManager::getActiveConfiguration()
-{
-	return ZDLConfigurationManager::activeConfig;
+void ZDLConfigurationManager::setActiveConfiguration(ZDLConf *zconf) {
+    //cout << "Using new configuration" << Qt::endl;
+    ZDLConfigurationManager::activeConfig = zconf;
 }
 
-void ZDLConfigurationManager::setCurrentDirectory(const QString& dir)
-{
-	cdir = dir;
+ZDLConf *ZDLConfigurationManager::getActiveConfiguration() {
+    return ZDLConfigurationManager::activeConfig;
 }
 
-QPixmap ZDLConfigurationManager::getIcon()
-{
-	return QPixmap(zdlicon);
+void ZDLConfigurationManager::setCurrentDirectory(const QString &dir) {
+    cdir = dir;
 }
 
-QString ZDLConfigurationManager::getCurrentDirectory()
-{
-	return cdir;
+QPixmap ZDLConfigurationManager::getIcon() {
+    return QPixmap(zdlicon);
 }
 
-QString ZDLConfigurationManager::getConfigFileName()
-{
-	return filename;
+QString ZDLConfigurationManager::getCurrentDirectory() {
+    return cdir;
 }
 
-void ZDLConfigurationManager::setConfigFileName(QString name)
-{
-	filename = std::move(name);
+QString ZDLConfigurationManager::getConfigFileName() {
+    return filename;
 }
 
-ZDLConfiguration* ZDLConfigurationManager::getConfiguration()
-{
-	return conf;
+void ZDLConfigurationManager::setConfigFileName(QString name) {
+    filename = std::move(name);
 }
 
-QString getWadLastDir(ZDLConf* zconf, bool dwd_first)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
-
-	if (dwd_first)
-	{
-		if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
-			return QProcessEnvironment::systemEnvironment().value("DOOMWADDIR");
-		else if (zconf->hasValue("zdl.general", "wadLastDir"))
-			return zconf->getValue("zdl.general", "wadLastDir");
-		else
-			return zconf->getValue("zdl.general", "lastDir");
-	}
-	else
-	{
-		if (zconf->hasValue("zdl.general", "wadLastDir"))
-			return zconf->getValue("zdl.general", "wadLastDir");
-		else if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
-			return QProcessEnvironment::systemEnvironment().value("DOOMWADDIR");
-		else
-			return zconf->getValue("zdl.general", "lastDir");
-	}
+ZDLConfiguration *ZDLConfigurationManager::getConfiguration() {
+    return conf;
 }
 
-QString getSrcLastDir(ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
+QString getWadLastDir(ZDLConf *zconf, bool dwd_first) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	if (zconf->hasValue("zdl.general", "srcLastDir"))
-		return zconf->getValue("zdl.general", "srcLastDir");
-	else
-		return zconf->getValue("zdl.general", "lastDir");
+    if (dwd_first) {
+        if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
+            return QProcessEnvironment::systemEnvironment().value("DOOMWADDIR");
+        else if (zconf->hasValue("zdl.general", "wadLastDir"))
+            return zconf->getValue("zdl.general", "wadLastDir");
+        else
+            return zconf->getValue("zdl.general", "lastDir");
+    } else {
+        if (zconf->hasValue("zdl.general", "wadLastDir"))
+            return zconf->getValue("zdl.general", "wadLastDir");
+        else if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
+            return QProcessEnvironment::systemEnvironment().value("DOOMWADDIR");
+        else
+            return zconf->getValue("zdl.general", "lastDir");
+    }
 }
 
-QString getSaveLastDir(ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
+QString getSrcLastDir(ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	if (zconf->hasValue("zdl.general", "saveLastDir"))
-		return zconf->getValue("zdl.general", "saveLastDir");
-	else
-		return zconf->getValue("zdl.general", "lastDir");
+    if (zconf->hasValue("zdl.general", "srcLastDir"))
+        return zconf->getValue("zdl.general", "srcLastDir");
+    else
+        return zconf->getValue("zdl.general", "lastDir");
 }
 
-QString getZdlLastDir(ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
+QString getSaveLastDir(ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	if (zconf->hasValue("zdl.general", "zdlLastDir"))
-		return zconf->getValue("zdl.general", "zdlLastDir");
-	else
-		return zconf->getValue("zdl.general", "lastDir");
+    if (zconf->hasValue("zdl.general", "saveLastDir"))
+        return zconf->getValue("zdl.general", "saveLastDir");
+    else
+        return zconf->getValue("zdl.general", "lastDir");
 }
 
-QString getIniLastDir(ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
+QString getZdlLastDir(ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	if (zconf->hasValue("zdl.general", "iniLastDir"))
-		return zconf->getValue("zdl.general", "iniLastDir");
-	else
-		return zconf->getValue("zdl.general", "lastDir");
+    if (zconf->hasValue("zdl.general", "zdlLastDir"))
+        return zconf->getValue("zdl.general", "zdlLastDir");
+    else
+        return zconf->getValue("zdl.general", "lastDir");
 }
 
-QString getLastDir(ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return {};
+QString getIniLastDir(ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	return zconf->getValue("zdl.general", "lastDir");
+    if (zconf->hasValue("zdl.general", "iniLastDir"))
+        return zconf->getValue("zdl.general", "iniLastDir");
+    else
+        return zconf->getValue("zdl.general", "lastDir");
 }
 
-void saveWadLastDir(const QString& fileName, ZDLConf* zconf, bool is_dir)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+QString getLastDir(ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return {};
 
-	if (is_dir)
-	{
-		zconf->setValue("zdl.general", "wadLastDir", fileName);
-		zconf->setValue("zdl.general", "lastDir", fileName);
-	}
-	else
-	{
-		QFileInfo fi(fileName);
-		zconf->setValue("zdl.general", "wadLastDir", fi.absolutePath());
-		zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
-	}
+    return zconf->getValue("zdl.general", "lastDir");
 }
 
-void saveSrcLastDir(const QString& fileName, ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+void saveWadLastDir(const QString &fileName, ZDLConf *zconf, bool is_dir) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
 
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "srcLastDir", fi.absolutePath());
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    if (is_dir) {
+        zconf->setValue("zdl.general", "wadLastDir", fileName);
+        zconf->setValue("zdl.general", "lastDir", fileName);
+    } else {
+        QFileInfo fi(fileName);
+        zconf->setValue("zdl.general", "wadLastDir", fi.absolutePath());
+        zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    }
 }
 
-void saveSaveLastDir(const QString& fileName, ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+void saveSrcLastDir(const QString &fileName, ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
 
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "saveLastDir", fi.absolutePath());
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    QFileInfo fi(fileName);
+    zconf->setValue("zdl.general", "srcLastDir", fi.absolutePath());
+    zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
-void saveZdlLastDir(const QString& fileName, ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+void saveSaveLastDir(const QString &fileName, ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
 
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "zdlLastDir", fi.absolutePath());
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    QFileInfo fi(fileName);
+    zconf->setValue("zdl.general", "saveLastDir", fi.absolutePath());
+    zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
-void saveIniLastDir(const QString& fileName, ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+void saveZdlLastDir(const QString &fileName, ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
 
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "iniLastDir", fi.absolutePath());
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    QFileInfo fi(fileName);
+    zconf->setValue("zdl.general", "zdlLastDir", fi.absolutePath());
+    zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
-void saveLastDir(const QString& fileName, ZDLConf* zconf)
-{
-	if (!zconf)
-		if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
-			return;
+void saveIniLastDir(const QString &fileName, ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
 
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+    QFileInfo fi(fileName);
+    zconf->setValue("zdl.general", "iniLastDir", fi.absolutePath());
+    zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
-void VerboseComboBox::showPopup()
-{
-	emit onPopup();
-	QComboBox::showPopup();
+void saveLastDir(const QString &fileName, ZDLConf *zconf) {
+    if (!zconf)
+        if (!(zconf = ZDLConfigurationManager::getActiveConfiguration()))
+            return;
+
+    QFileInfo fi(fileName);
+    zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
-void VerboseComboBox::hidePopup()
-{
-	emit onHidePopup();
-	QComboBox::hidePopup();
+void VerboseComboBox::showPopup() {
+    emit onPopup();
+    QComboBox::showPopup();
 }
 
-QValidator::State EvilValidator::validate([[maybe_unused]] QString& input, [[maybe_unused]] int& pos) const
-{
-	return QValidator::Invalid;
+void VerboseComboBox::hidePopup() {
+    emit onHidePopup();
+    QComboBox::hidePopup();
+}
+
+QValidator::State EvilValidator::validate([[maybe_unused]] QString &input, [[maybe_unused]] int &pos) const {
+    return QValidator::Invalid;
 }

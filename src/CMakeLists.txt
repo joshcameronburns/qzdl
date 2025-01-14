@@ -3,17 +3,17 @@ set(CMAKE_AUTORCC ON)
 
 if (QT5)
     find_package(Qt5
-        REQUIRED COMPONENTS
+            REQUIRED COMPONENTS
             Core
             Gui
             Widgets)
-else()
+else ()
     find_package(Qt6
-        REQUIRED COMPONENTS
+            REQUIRED COMPONENTS
             Core
             Gui
             Widgets)
-endif()
+endif ()
 
 add_executable(qzdl
         external/miniz/miniz.h
@@ -81,27 +81,27 @@ add_executable(qzdl
         ZLibPK3.h)
 
 target_link_libraries(qzdl
-    PRIVATE
+        PRIVATE
         Qt::Core
         Qt::Gui
         Qt::Widgets)
 
 target_include_directories(qzdl
-    PRIVATE
+        PRIVATE
         external/miniz
         xpm)
 
 if (WIN32)
     target_sources(qzdl
-        PRIVATE
+            PRIVATE
             resources/Win32/resource.h
             resources/Win32/qzdl.rc
             SimpleWFA.h
             SimpleWFA.cpp
             ZDLFileAssociations.h
             ZDLFileAssociations.cpp)
-endif()
+endif ()
 
 set_target_properties(qzdl
-    PROPERTIES
+        PROPERTIES
         OUTPUT_NAME ZDL)

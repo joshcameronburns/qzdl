@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QFileInfo>
 #include <utility>
 #include "ZDLListable.h"
@@ -25,72 +25,59 @@
 #include "ZDLConfigurationManager.h"
 
 ZDLNameListable::ZDLNameListable(
-	QListWidget* parent,
-	int type,
-	QString file,
-	QString name)
-	:
-	ZDLListable(parent, type)
-{
-	setFile(std::move(file));
-	setDisplayName(std::move(name));
-	setName(generateName());
+        QListWidget *parent,
+        int type,
+        QString file,
+        QString name)
+        :
+        ZDLListable(parent, type) {
+    setFile(std::move(file));
+    setDisplayName(std::move(name));
+    setName(generateName());
 }
 
 ZDLNameListable::~ZDLNameListable()
 = default;
 
-QString ZDLNameListable::getFile()
-{
-	return fileName;
+QString ZDLNameListable::getFile() {
+    return fileName;
 }
 
-QString ZDLNameListable::getName()
-{
-	return displayName;
+QString ZDLNameListable::getName() {
+    return displayName;
 }
 
-void ZDLNameListable::setDisplayName(QString name)
-{
-	displayName = std::move(name);
-	setName(generateName());
+void ZDLNameListable::setDisplayName(QString name) {
+    displayName = std::move(name);
+    setName(generateName());
 }
 
-void ZDLNameListable::setFile(QString file)
-{
-	fileName = std::move(file);
-	setName(generateName());
+void ZDLNameListable::setFile(QString file) {
+    fileName = std::move(file);
+    setName(generateName());
 }
 
-QString ZDLNameListable::generateName()
-{
-	return generateName(ZDLConfigurationManager::getActiveConfiguration());
+QString ZDLNameListable::generateName() {
+    return generateName(ZDLConfigurationManager::getActiveConfiguration());
 }
 
-QString ZDLNameListable::generateName(ZDLConf* zconf)
-{
-	bool showPath = true;
-	if (zconf->hasValue("zdl.general", "showpaths"))
-	{
-		int ok = 0;
-		QString rc = zconf->getValue("zdl.general", "showpaths", &ok);
-		if (!rc.isNull())
-		{
-			if (rc == "0")
-			{
-				showPath = false;
-			}
-		}
-	}
-	QString list = "";
-	if (showPath)
-	{
-		list = QString("%1 [%2]").arg(displayName, fileName);
-	}
-	else
-	{
-		list = displayName;
-	}
-	return list;
+QString ZDLNameListable::generateName(ZDLConf *zconf) {
+    bool showPath = true;
+    if (zconf->hasValue("zdl.general", "showpaths")) {
+        int ok = 0;
+        QString rc = zconf->getValue("zdl.general", "showpaths", &ok);
+        if (!rc.isNull()) {
+            if (rc == "0") {
+                showPath = false;
+            }
+        }
+    }
+    QString list = "";
+    if (showPath) {
+        list = QString("%1 [%2]").arg(displayName, fileName);
+    } else {
+        list = displayName;
+    }
+    return list;
 }
 

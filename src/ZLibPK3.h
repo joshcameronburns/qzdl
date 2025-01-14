@@ -18,17 +18,19 @@
  */
 #pragma once
 
-#include <QtCore>
 #include "ZDLMapFile.h"
 
-class ZLibPK3 : public ZDLMapFile
-{
- private:
-	QString file;
- public:
-	explicit ZLibPK3(QString  file);
-	QString getIwadinfoName() override;
-	QStringList getMapNames() override;
-	bool isMAPXX() override;
-	~ZLibPK3() override;
+class ZLibPK3 : public ZDLMapFile {
+private:
+    QString file;
+public:
+    explicit ZLibPK3(QString file);
+
+    QString getIwadinfoName() override;
+
+    QStringList getMapNames() override;
+
+    bool isMAPXX() override;
+
+    ~ZLibPK3() override;
 };

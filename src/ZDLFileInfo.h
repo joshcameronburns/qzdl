@@ -20,26 +20,29 @@
 
 #include <QFileInfo>
 
-class ZDLFileInfo : public QFileInfo
-{
- public:
-	ZDLFileInfo();
-	explicit ZDLFileInfo(const QString& file);
-	virtual QString GetFileDescription();
+class ZDLFileInfo : public QFileInfo {
+public:
+    ZDLFileInfo();
+
+    explicit ZDLFileInfo(const QString &file);
+
+    virtual QString GetFileDescription();
 };
 
-class ZDLIwadInfo : public ZDLFileInfo
-{
- public:
-	ZDLIwadInfo();
-	explicit ZDLIwadInfo(const QString& file);
-	QString GetFileDescription() override;
+class ZDLIwadInfo : public ZDLFileInfo {
+public:
+    ZDLIwadInfo();
+
+    explicit ZDLIwadInfo(const QString &file);
+
+    QString GetFileDescription() override;
 };
 
-class ZDLAppInfo : public ZDLFileInfo
-{
- public:
-	ZDLAppInfo();
-	explicit ZDLAppInfo(const QString& file);
-	QString GetFileDescription() override;
+class ZDLAppInfo : public ZDLFileInfo {
+public:
+    ZDLAppInfo();
+
+    explicit ZDLAppInfo(const QString &file);
+
+    QString GetFileDescription() override;
 };

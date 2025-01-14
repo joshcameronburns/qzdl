@@ -27,29 +27,36 @@
 #include <vector>
 #include <windows.h>
 
-class AssocListWidget: public QListWidgetItem {
-	private:
-		Qt::CheckState orig_state;
-		QString prog_id;
-		QString desc;
-		QStringList extensions;
-		UINT icon;
-		bool hklm;
-		bool remove;
-	public: 
-		AssocListWidget(const QString &text, QListWidget *parent, const QString &prog_id, const QString &desc, const QString &exts, bool hklm, UINT icon);
-		void Process(const QString &file_path);
-		void SetRemove(int state);
+class AssocListWidget : public QListWidgetItem {
+private:
+    Qt::CheckState orig_state;
+    QString prog_id;
+    QString desc;
+    QStringList extensions;
+    UINT icon;
+    bool hklm;
+    bool remove;
+public:
+    AssocListWidget(const QString &text, QListWidget *parent, const QString &prog_id, const QString &desc,
+                    const QString &exts, bool hklm, UINT icon);
+
+    void Process(const QString &file_path);
+
+    void SetRemove(int state);
 };
 
-class ZDLFileAssociations: public QDialog {
-	Q_OBJECT
-	private:
-		QListWidget *assoc_list;
-	private slots:
-		void ApplyAssociations();
-		void ClearStateChanged(int state);
-	public: 
-		ZDLFileAssociations(QWidget *parent);
+class ZDLFileAssociations : public QDialog {
+Q_OBJECT
+
+private:
+    QListWidget *assoc_list;
+private slots:
+
+    void ApplyAssociations();
+
+    void ClearStateChanged(int state);
+
+public:
+    ZDLFileAssociations(QWidget *parent);
 };
 

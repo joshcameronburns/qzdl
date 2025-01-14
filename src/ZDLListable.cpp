@@ -20,17 +20,14 @@
 
 #include "ZDLListable.h"
 
-ZDLListable::ZDLListable(QListWidget* parent, int type) : QListWidgetItem(parent)
-{
-	myType = type;
+ZDLListable::ZDLListable(QListWidget *parent, int type) : QListWidgetItem(parent) {
+    myType = type;
 }
 
-void ZDLListable::setName(const QString& newName)
-{
-	setText(newName);
+void ZDLListable::setName(const QString &newName) {
+    setText(newName);
 }
 
-QString ZDLListable::getName()
-{
-	return text();
+QString ZDLListable::getName() {
+    return text();
 }

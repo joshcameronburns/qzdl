@@ -23,15 +23,13 @@
 #include "ZDLFileListable.h"
 #include <QFileInfo>
 
-ZDLFileListable::ZDLFileListable(QListWidget* parent, int type, const QString& file)
-	: ZDLNameListable(parent, type, file, QFileInfo(file).fileName())
-{
-	fileName = file;
+ZDLFileListable::ZDLFileListable(QListWidget *parent, int type, const QString &file)
+        : ZDLNameListable(parent, type, file, QFileInfo(file).fileName()) {
+    fileName = file;
 }
 
-QString ZDLFileListable::getFile()
-{
-	return fileName;
+QString ZDLFileListable::getFile() {
+    return fileName;
 }
 	
 

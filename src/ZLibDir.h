@@ -21,14 +21,17 @@
 #include <QtCore>
 #include "ZDLMapFile.h"
 
-class ZLibDir : public ZDLMapFile
-{
- private:
-	QString file;
- public:
-	explicit ZLibDir(QString  file);
-	QString getIwadinfoName() override;
-	QStringList getMapNames() override;
-	bool isMAPXX() override;
-	~ZLibDir() override;
+class ZLibDir : public ZDLMapFile {
+private:
+    QString file;
+public:
+    explicit ZLibDir(QString file);
+
+    QString getIwadinfoName() override;
+
+    QStringList getMapNames() override;
+
+    bool isMAPXX() override;
+
+    ~ZLibDir() override;
 };

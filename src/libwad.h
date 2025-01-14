@@ -22,28 +22,29 @@
 #include <QString>
 #include "ZDLMapFile.h"
 
-class DoomWad : public ZDLMapFile
-{
- private:
-	struct wadheader_t
-	{
-		[[maybe_unused]] char type[4];
-		int numLumps;
-		int directoryOffset;
-	};
+class DoomWad : public ZDLMapFile {
+private:
+    struct wadheader_t {
+        [[maybe_unused]] char type[4];
+        int numLumps;
+        int directoryOffset;
+    };
 
-	struct wadlump_t
-	{
-		[[maybe_unused]] int offset;
-		[[maybe_unused]] int length;
-		char name[8];
-	};
-	
-	QString m_file;
- public:
-	explicit DoomWad(QString file);
-	QString getIwadinfoName() override;
-	QStringList getMapNames() override;
-	bool isMAPXX() override;
-	~DoomWad() override;
+    struct wadlump_t {
+        [[maybe_unused]] int offset;
+        [[maybe_unused]] int length;
+        char name[8];
+    };
+
+    QString m_file;
+public:
+    explicit DoomWad(QString file);
+
+    QString getIwadinfoName() override;
+
+    QStringList getMapNames() override;
+
+    bool isMAPXX() override;
+
+    ~DoomWad() override;
 };

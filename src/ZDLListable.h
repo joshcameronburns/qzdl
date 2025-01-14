@@ -21,13 +21,16 @@
 #include <QListWidgetItem>
 #include <QObject>
 
-class ZDLListable : public QObject, public QListWidgetItem
-{
- Q_OBJECT
- public:
-	virtual QString getName();
-	ZDLListable(QListWidget* parent, int type);
-	virtual void setName(const QString& inName);
- protected:
-	int myType;
+class ZDLListable : public QObject, public QListWidgetItem {
+Q_OBJECT
+
+public:
+    virtual QString getName();
+
+    ZDLListable(QListWidget *parent, int type);
+
+    virtual void setName(const QString &inName);
+
+protected:
+    int myType;
 };

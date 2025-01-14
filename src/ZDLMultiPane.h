@@ -19,59 +19,69 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QComboBox>
 #include "ZDLWidget.h"
 
-class PlayersValidator : public QIntValidator
-{
- public:
-	PlayersValidator(QObject* parent, QComboBox* cb) : QIntValidator(1, INT_MAX, parent), validated_cb(cb)
-	{
-	}
-	void fixup(QString& input) const override;
- private:
-	QComboBox* validated_cb;
+class PlayersValidator : public QIntValidator {
+public:
+    PlayersValidator(QObject *parent, QComboBox *cb) : QIntValidator(1, INT_MAX, parent), validated_cb(cb) {
+    }
+
+    void fixup(QString &input) const override;
+
+private:
+    QComboBox *validated_cb;
 };
 
-class ZDLMultiPane : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLMultiPane(ZDLWidget* parent = nullptr);
-	void setLaunchButton(QPushButton* some_btn)
-	{
-		launch_btn = some_btn;
-	}
-	void enableAll();
-	void disableAll();
-	void newConfig() override;
-	void rebuild() override;
- private:
-	QIntValidator* max_int_validator;
-	PlayersValidator* players_validator;
-	QComboBox* gMode;
-	QLineEdit* tHostAddy;
-	QComboBox* gPlayers;
-	QLineEdit* tFragLimit;
-	QLineEdit* tTimeLimit;
-	QPushButton* launch_btn;
-	QLineEdit* bDMFlags;
-	QLineEdit* bDMFlags2;
-	QComboBox* extratic;
-	QComboBox* netmode;
-	QLineEdit* portNo;
-	QComboBox* dupmode;
-	QComboBox* savegame;
+class ZDLMultiPane : public ZDLWidget {
+Q_OBJECT
 
- protected slots:
-	void ModePlayerChanged(int idx);
-	void EditPlayers(int idx);
-	void EditSave(int idx);
-	void VerbosePopup();
-	void dmflags();
-	void dmflags2();
+public:
+    explicit ZDLMultiPane(ZDLWidget *parent = nullptr);
+
+    void setLaunchButton(QPushButton *some_btn) {
+        launch_btn = some_btn;
+    }
+
+    void enableAll();
+
+    void disableAll();
+
+    void newConfig() override;
+
+    void rebuild() override;
+
+private:
+    QIntValidator *max_int_validator;
+    PlayersValidator *players_validator;
+    QComboBox *gMode;
+    QLineEdit *tHostAddy;
+    QComboBox *gPlayers;
+    QLineEdit *tFragLimit;
+    QLineEdit *tTimeLimit;
+    QPushButton *launch_btn;
+    QLineEdit *bDMFlags;
+    QLineEdit *bDMFlags2;
+    QComboBox *extratic;
+    QComboBox *netmode;
+    QLineEdit *portNo;
+    QComboBox *dupmode;
+    QComboBox *savegame;
+
+protected slots:
+
+    void ModePlayerChanged(int idx);
+
+    void EditPlayers(int idx);
+
+    void EditSave(int idx);
+
+    void VerbosePopup();
+
+    void dmflags();
+
+    void dmflags2();
 };

@@ -24,120 +24,106 @@
 #include "libwad.h"
 
 DoomWad::DoomWad(QString file) :
-	m_file(std::move(file))
-{
+        m_file(std::move(file)) {
 }
 
 DoomWad::~DoomWad()
 = default;
 
-QStringList DoomWad::getMapNames()
-{
-	QStringList map_names;
-	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
+QStringList DoomWad::getMapNames() {
+    QStringList map_names;
+    std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (!wadStream)
-	{
-		return map_names;
-	}
+    if (!wadStream) {
+        return map_names;
+    }
 
-	wadheader_t header{};
-	wadStream.read((char*)&header, sizeof(header));
+    wadheader_t header{};
+    wadStream.read((char *) &header, sizeof(header));
 
-	std::vector<wadlump_t> lumps(header.numLumps);
-	wadStream.seekg(header.directoryOffset);
-	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
-	
-	// Generally the WAD structure follows a simple layout,
-	// and we can assume that it will hold for most WADs.
-	// In most cases map lumps follow the pattern:
-	// MAPNAME
-	// THINGS
-	// ...
-	// so we take the first lump name preceding THINGS
-	const char* previous = nullptr;
-	for (const wadlump_t& lump: lumps)
-	{
-		if (strcmp("THINGS", lump.name) == 0 && previous != nullptr)
-		{
-			map_names << previous;
-		}
+    std::vector<wadlump_t> lumps(header.numLumps);
+    wadStream.seekg(header.directoryOffset);
+    wadStream.read((char *) lumps.data(), (long) (header.numLumps * sizeof(wadlump_t)));
 
-		previous = lump.name;
-	}
-	
-	wadStream.close();
-	return map_names;
+    // Generally the WAD structure follows a simple layout,
+    // and we can assume that it will hold for most WADs.
+    // In most cases map lumps follow the pattern:
+    // MAPNAME
+    // THINGS
+    // ...
+    // so we take the first lump name preceding THINGS
+    const char *previous = nullptr;
+    for (const wadlump_t &lump: lumps) {
+        if (strcmp("THINGS", lump.name) == 0 && previous != nullptr) {
+            map_names << previous;
+        }
+
+        previous = lump.name;
+    }
+
+    wadStream.close();
+    return map_names;
 }
 
-QString DoomWad::getIwadinfoName()
-{
-	QString iwadInfoName;
-	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
+QString DoomWad::getIwadinfoName() {
+    QString iwadInfoName;
+    std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (!wadStream)
-	{
-		return iwadInfoName;
-	}
+    if (!wadStream) {
+        return iwadInfoName;
+    }
 
-	wadheader_t header{};
-	wadStream.read((char*)&header, sizeof(header));
+    wadheader_t header{};
+    wadStream.read((char *) &header, sizeof(header));
 
-	std::vector<wadlump_t> lumps(header.numLumps);
-	wadStream.seekg(header.directoryOffset);
-	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
-	
-	for (const wadlump_t& lump: lumps)
-	{
-		if (strcmp("IWADINFO", lump.name) == 0)
-		{
-			char* iwadinfo = new char[lump.length];
-			wadStream.seekg(lump.offset);
-			wadStream.read(iwadinfo, lump.length);
-			
-			QRegularExpression name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+");
-			QRegularExpressionMatch match = name_re.match(iwadinfo, Qt::CaseInsensitive);
+    std::vector<wadlump_t> lumps(header.numLumps);
+    wadStream.seekg(header.directoryOffset);
+    wadStream.read((char *) lumps.data(), (long) (header.numLumps * sizeof(wadlump_t)));
 
-			if (match.hasPartialMatch())
-			{
-				iwadInfoName = match.captured(1);
-			}
-			
-			delete[] iwadinfo;
-			break;
-		}
-	}
+    for (const wadlump_t &lump: lumps) {
+        if (strcmp("IWADINFO", lump.name) == 0) {
+            char *iwadinfo = new char[lump.length];
+            wadStream.seekg(lump.offset);
+            wadStream.read(iwadinfo, lump.length);
 
-	wadStream.close();
-	return iwadInfoName;
+            static QRegularExpression name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+");
+            QRegularExpressionMatch match = name_re.match(iwadinfo, Qt::CaseInsensitive);
+
+            if (match.hasPartialMatch()) {
+                iwadInfoName = match.captured(1);
+            }
+
+            delete[] iwadinfo;
+            break;
+        }
+    }
+
+    wadStream.close();
+    return iwadInfoName;
 }
 
-bool DoomWad::isMAPXX()
-{
-	bool isMapxx = false;
-	std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
+bool DoomWad::isMAPXX() {
+    bool isMapxx = false;
+    std::ifstream wadStream(m_file.toUtf8().constData(), std::ios::binary);
 
-	if (!wadStream)
-	{
-		return isMapxx;
-	}
+    if (!wadStream) {
+        return isMapxx;
+    }
 
-	wadheader_t header{};
-	wadStream.read((char*)&header, sizeof(header));
+    wadheader_t header{};
+    wadStream.read((char *) &header, sizeof(header));
 
-	std::vector<wadlump_t> lumps(header.numLumps);
-	wadStream.seekg(header.directoryOffset);
-	wadStream.read((char*)lumps.data(), (long)(header.numLumps * sizeof(wadlump_t)));
+    std::vector<wadlump_t> lumps(header.numLumps);
+    wadStream.seekg(header.directoryOffset);
+    wadStream.read((char *) lumps.data(), (long) (header.numLumps * sizeof(wadlump_t)));
 
-	for (const wadlump_t& lump: lumps)
-	{
-		if (strcmp("MAP01", lump.name) == 0 )
-		{
-			isMapxx = true;
-			break;
-		}
-	}
+    for (const wadlump_t &lump: lumps) {
+        if (strcmp("MAP01", lump.name) == 0) {
+            isMapxx = true;
+            break;
+        }
+    }
 
-	wadStream.close();
-	return isMapxx;
+    wadStream.close();
+    return isMapxx;
 }

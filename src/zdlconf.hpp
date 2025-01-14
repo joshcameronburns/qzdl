@@ -19,83 +19,102 @@
  */
 #pragma once
 
-#include <QtCore>
 #include "zdlcommon.h"
 #include "zdlsection.hpp"
 
-class ZDLConf
-{
- public:
-	enum modes
-	{
-		ReadOnly = 0x01,
-		WriteOnly = 0x02,
-		ReadWrite = ReadOnly | WriteOnly,
-		FileRead = 0x04,
-		FileWrite = 0x08,
-		FileReadWrite = FileRead | FileWrite,
-		Default = ReadWrite | FileReadWrite
-	};
+class ZDLConf {
+public:
+    enum modes {
+        ReadOnly = 0x01,
+        WriteOnly = 0x02,
+        ReadWrite = ReadOnly | WriteOnly,
+        FileRead = 0x04,
+        FileWrite = 0x08,
+        FileReadWrite = FileRead | FileWrite,
+        Default = ReadWrite | FileReadWrite
+    };
 
-	int readINI(const QString& file);
-	int writeINI(const QString& file);
-	QString getValue(const QString& section, const QString& variable);
-	QString getValue(const QString& lsection, const QString& variable, int* status);
-	int hasValue(const QString& section, const QString& variable);
-	void deleteValue(const QString& lsection, const QString& variable);
-	void setValue(const QString& lsection, const QString& variable, int value);
-	void setValue(const QString& lsection, const QString& variable, const QString& szBuffer);
-	~ZDLConf();
-	explicit ZDLConf(int mode = ZDLConf::Default);
-	int reopen(int imode);
-	QVector<ZDLSection*> sections;
-	int writeStream(QIODevice* stream);
-	ZDLSection* getSection(const QString& section);
-	void deleteSection(const QString& section);
-	ZDLConf* clone();
-	void deleteSectionByName(const QString& section);
-	void addSection(ZDLSection* section)
-	{
-		sections.push_back(section);
-	}
-	int getFlagsForValue(const QString& section, const QString& var);
-	bool setFlagsForValue(const QString& section, const QString& var, int value);
-	bool deleteRegex(const QString& section, const QString& regex);
- protected:
-	void readLock()
-	{
-		LOGDATAO() << "ReadLockGet" << Qt::endl;
-		GET_READLOCK(mutex);
-	}
-	void writeLock()
-	{
-		LOGDATAO() << "WriteLockGet" << Qt::endl;
-		GET_WRITELOCK(mutex);
-	}
-	void releaseReadLock()
-	{
-		LOGDATAO() << "ReadLockRelease" << Qt::endl;
-		RELEASE_READLOCK(mutex);
-	}
-	void releaseWriteLock()
-	{
-		LOGDATAO() << "WriteLockRelease" << Qt::endl;
-		RELEASE_WRITELOCK(mutex);
-	}
-	bool tryReadLock(int timeout = 999999999)
-	{
-		LOGDATAO() << "ReadLockTryGet" << Qt::endl;
-		return TRY_READLOCK(mutex, timeout);
-	}
-	bool tryWriteLock(int timeout = 999999999)
-	{
-		LOGDATAO() << "WriteLockTryGet" << Qt::endl;
-		return TRY_WRITELOCK(mutex, timeout);
-	}
- private:
-	int mode;
-	int reads;
-	int writes;
-	void parse(QString in, ZDLSection* current);
-	LOCK_CLASS* mutex;
+    int readINI(const QString &file);
+
+    int writeINI(const QString &file);
+
+    QString getValue(const QString &section, const QString &variable);
+
+    QString getValue(const QString &lsection, const QString &variable, int *status);
+
+    int hasValue(const QString &section, const QString &variable);
+
+    void deleteValue(const QString &lsection, const QString &variable);
+
+    void setValue(const QString &lsection, const QString &variable, int value);
+
+    void setValue(const QString &lsection, const QString &variable, const QString &szBuffer);
+
+    ~ZDLConf();
+
+    explicit ZDLConf(int mode = ZDLConf::Default);
+
+    int reopen(int imode);
+
+    QVector<ZDLSection *> sections;
+
+    int writeStream(QIODevice *stream);
+
+    ZDLSection *getSection(const QString &section);
+
+    void deleteSection(const QString &section);
+
+    ZDLConf *clone();
+
+    void deleteSectionByName(const QString &section);
+
+    void addSection(ZDLSection *section) {
+        sections.push_back(section);
+    }
+
+    int getFlagsForValue(const QString &section, const QString &var);
+
+    bool setFlagsForValue(const QString &section, const QString &var, int value);
+
+    bool deleteRegex(const QString &section, const QString &regex);
+
+protected:
+    void readLock() {
+        LOGDATAO() << "ReadLockGet" << Qt::endl;
+        GET_READLOCK(mutex);
+    }
+
+    void writeLock() {
+        LOGDATAO() << "WriteLockGet" << Qt::endl;
+        GET_WRITELOCK(mutex);
+    }
+
+    void releaseReadLock() {
+        LOGDATAO() << "ReadLockRelease" << Qt::endl;
+        RELEASE_READLOCK(mutex);
+    }
+
+    void releaseWriteLock() {
+        LOGDATAO() << "WriteLockRelease" << Qt::endl;
+        RELEASE_WRITELOCK(mutex);
+    }
+
+    bool tryReadLock(int timeout = 999999999) {
+        LOGDATAO() << "ReadLockTryGet" << Qt::endl;
+        return TRY_READLOCK(mutex, timeout);
+    }
+
+    bool tryWriteLock(int timeout = 999999999) {
+        LOGDATAO() << "WriteLockTryGet" << Qt::endl;
+        return TRY_WRITELOCK(mutex, timeout);
+    }
+
+private:
+    int mode;
+    int reads;
+    int writes;
+
+    void parse(QString in, ZDLSection *current);
+
+    LOCK_CLASS *mutex;
 };

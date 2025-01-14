@@ -32,39 +32,46 @@
  * File Level: .ZDL files and zdl.ini level config
  */
 
-class ZDLConfiguration
-{
- public:
-	ZDLConfiguration();
-	// NUM_CONFS *MUST* be last!
-	enum ConfScope
-	{
-		CONF_SYSTEM, CONF_USER, CONF_FILE, NUM_CONFS
-	};
+class ZDLConfiguration {
+public:
+    ZDLConfiguration();
 
-	/* ScopeRules: defines how to search for the key.
-	 * SCOPE_HIGHER: Search the specified scope and higher (ie, if user is specified, system is too)
-	 * SCOPE_THIS: Only the specified scope is searched
-	 * SCOPE_LOWER: Only the specified scope and lower
-	 * NOTE! This only works when ConfScope is not NUM_CONFS
-	 */
-	enum ScopeRules
-	{
-		SCOPE_HIGHER, SCOPE_THIS, SCOPE_LOWER, SCOPE_ALL
-	};
-	QString getPath(ConfScope scope);
-	ZDLConf* getConf(ConfScope scope);
+    // NUM_CONFS *MUST* be last!
+    enum ConfScope {
+        CONF_SYSTEM, CONF_USER, CONF_FILE, NUM_CONFS
+    };
 
-	static QString getString(const QString& section, const QString& key, int* ok, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
-	static int getInt(const QString& section, const QString& key, int* ok, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
+    /* ScopeRules: defines how to search for the key.
+     * SCOPE_HIGHER: Search the specified scope and higher (ie, if user is specified, system is too)
+     * SCOPE_THIS: Only the specified scope is searched
+     * SCOPE_LOWER: Only the specified scope and lower
+     * NOTE! This only works when ConfScope is not NUM_CONFS
+     */
+    enum ScopeRules {
+        SCOPE_HIGHER, SCOPE_THIS, SCOPE_LOWER, SCOPE_ALL
+    };
 
-	static bool
-	setString(const QString& section, const QString& key, const QString& value, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
-	static bool setInt(const QString& section, const QString& key, int value, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
+    QString getPath(ConfScope scope);
 
-	static bool hasVariable(const QString& section, const QString& key, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
+    ZDLConf *getConf(ConfScope scope);
 
- private:
-	ZDLConf* confs[NUM_CONFS]{};
-	QString paths[NUM_CONFS];
+    static QString getString(const QString &section, const QString &key, int *ok, ConfScope scope = NUM_CONFS,
+                             ScopeRules rules = SCOPE_ALL);
+
+    static int getInt(const QString &section, const QString &key, int *ok, ConfScope scope = NUM_CONFS,
+                      ScopeRules rules = SCOPE_ALL);
+
+    static bool
+    setString(const QString &section, const QString &key, const QString &value, ConfScope scope = NUM_CONFS,
+              ScopeRules rules = SCOPE_ALL);
+
+    static bool setInt(const QString &section, const QString &key, int value, ConfScope scope = NUM_CONFS,
+                       ScopeRules rules = SCOPE_ALL);
+
+    static bool
+    hasVariable(const QString &section, const QString &key, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
+
+private:
+    ZDLConf *confs[NUM_CONFS]{};
+    QString paths[NUM_CONFS];
 };

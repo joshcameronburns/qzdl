@@ -23,20 +23,18 @@
 #include "ZDLListWidget.h"
 #include "ZDLFilePane.h"
 
-ZDLFilePane::ZDLFilePane(QWidget* parent) : ZDLWidget(parent)
-{
-	auto* box = new QVBoxLayout(this);
-	box->setSpacing(2);
+ZDLFilePane::ZDLFilePane(QWidget *parent) : ZDLWidget(parent) {
+    auto *box = new QVBoxLayout(this);
+    box->setSpacing(2);
 
-	box->addWidget(new QLabel("External files", this));
+    box->addWidget(new QLabel("External files", this));
 
-	fList = new ZDLFileList(this);
-	fList->doDragDrop(true);
-	box->addWidget(fList);
-	setContentsMargins(0, 0, 0, 0);
-	layout()->setContentsMargins(0, 0, 0, 0);
+    fList = new ZDLFileList(this);
+    fList->doDragDrop(true);
+    box->addWidget(fList);
+    setContentsMargins(0, 0, 0, 0);
+    layout()->setContentsMargins(0, 0, 0, 0);
 }
 
-void ZDLFilePane::rebuild()
-{
+void ZDLFilePane::rebuild() {
 }

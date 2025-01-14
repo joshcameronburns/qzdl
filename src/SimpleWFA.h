@@ -21,16 +21,31 @@
 //	https://docs.microsoft.com/en-us/windows/desktop/com/-progid--key
 
 namespace SimpleWFA {
-	enum AssocStatus {ASSOCIATED_AFF, ASSOCIATED_NEG, ASSOCIATED_DUNNO};
-	enum CreationDisposition {CD_CREATE_NEW, CD_CREATE_ALWAYS, CD_UPDATE_ALWAYS};
-	
-	bool CheckIfLocalMachineAvailable();
-	AssocStatus CheckAssociationStatus(bool local_machine, bool check_registration, const wchar_t* extension, const wchar_t* prog_id, const wchar_t* app_exe=nullptr);
-	void Associate(bool local_machine, const wchar_t* extension, const wchar_t* prog_id, const wchar_t* app_exe=nullptr);
-	void Deassociate(bool local_machine, const wchar_t* extension, const wchar_t* prog_id, const wchar_t* app_exe=nullptr);
-	void CreateSimpleProgID(bool local_machine, CreationDisposition creation_disp, const wchar_t* prog_id, const wchar_t* prog_path, const wchar_t* prog_desc=nullptr, UINT prog_icon_res_id=0, const wchar_t* prog_open_params=nullptr);
-	void RemoveProgID(bool local_machine, const wchar_t* prog_id);
-	void NotifyShell();
+    enum AssocStatus {
+        ASSOCIATED_AFF, ASSOCIATED_NEG, ASSOCIATED_DUNNO
+    };
+    enum CreationDisposition {
+        CD_CREATE_NEW, CD_CREATE_ALWAYS, CD_UPDATE_ALWAYS
+    };
+
+    bool CheckIfLocalMachineAvailable();
+
+    AssocStatus CheckAssociationStatus(bool local_machine, bool check_registration, const wchar_t *extension,
+                                       const wchar_t *prog_id, const wchar_t *app_exe = nullptr);
+
+    void
+    Associate(bool local_machine, const wchar_t *extension, const wchar_t *prog_id, const wchar_t *app_exe = nullptr);
+
+    void
+    Deassociate(bool local_machine, const wchar_t *extension, const wchar_t *prog_id, const wchar_t *app_exe = nullptr);
+
+    void CreateSimpleProgID(bool local_machine, CreationDisposition creation_disp, const wchar_t *prog_id,
+                            const wchar_t *prog_path, const wchar_t *prog_desc = nullptr, UINT prog_icon_res_id = 0,
+                            const wchar_t *prog_open_params = nullptr);
+
+    void RemoveProgID(bool local_machine, const wchar_t *prog_id);
+
+    void NotifyShell();
 }
 
 #endif //WINFILEASSOC_H

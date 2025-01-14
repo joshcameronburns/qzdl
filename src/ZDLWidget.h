@@ -22,30 +22,45 @@
 #include <QObject>
 #include <QWidget>
 
-class ZDLWidget : public QWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLWidget(ZDLWidget* parent);
-	explicit ZDLWidget(QWidget* parent);
-	ZDLWidget();
-	void setZParent(ZDLWidget* parent);
-	virtual void rebuild();
-	virtual void newConfig();
- signals:
-	void buildChildren(ZDLWidget*);
-	void buildParent(ZDLWidget*);
-	void readChildren(ZDLWidget*);
-	void readParent(ZDLWidget*);
- public slots:
-	virtual void notifyFromChild(ZDLWidget*);
-	virtual void notifyFromParent(ZDLWidget*);
-	virtual void readFromChild(ZDLWidget*);
-	virtual void readFromParent(ZDLWidget*);
+class ZDLWidget : public QWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLWidget(ZDLWidget *parent);
+
+    explicit ZDLWidget(QWidget *parent);
+
+    ZDLWidget();
+
+    void setZParent(ZDLWidget *parent);
+
+    virtual void rebuild();
+
+    virtual void newConfig();
+
+signals:
+
+    void buildChildren(ZDLWidget *);
+
+    void buildParent(ZDLWidget *);
+
+    void readChildren(ZDLWidget *);
+
+    void readParent(ZDLWidget *);
+
+public slots:
+
+    virtual void notifyFromChild(ZDLWidget *);
+
+    virtual void notifyFromParent(ZDLWidget *);
+
+    virtual void readFromChild(ZDLWidget *);
+
+    virtual void readFromParent(ZDLWidget *);
 //protected:
 //	virtual void fromUpstream(ZDLWidget *origin);
 //	virtual void fromDownstream(ZDLWidget *origin);
 
- private:
-	ZDLWidget* zparent{};
+private:
+    ZDLWidget *zparent{};
 };

@@ -19,32 +19,40 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QCheckBox>
 #include "ZDLWidget.h"
 #include "ZDLSourcePortList.h"
 #include "ZDLIWadList.h"
 
-class ZDLSettingsTab : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLSettingsTab(QWidget* parent);
-	void rebuild() override;
-	void newConfig() override;
-	void startRead();
-	void writeConfig();
- protected slots:
-	void fileAssociations();
-	void reloadConfig();
-	void pathToggled(int state);
- private:
-	QLineEdit* alwaysArgs;
-	QCheckBox* launchClose;
-	ZDLIWadList* iwadList;
-	ZDLSourcePortList* sourceList;
-	QCheckBox* showPaths;
-	QCheckBox* launchZDL;
-	QCheckBox* savePaths;
+class ZDLSettingsTab : public ZDLWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLSettingsTab(QWidget *parent);
+
+    void rebuild() override;
+
+    void newConfig() override;
+
+    void startRead();
+
+    void writeConfig();
+
+protected slots:
+
+    void fileAssociations();
+
+    void reloadConfig();
+
+    void pathToggled(int state);
+
+private:
+    QLineEdit *alwaysArgs;
+    QCheckBox *launchClose;
+    ZDLIWadList *iwadList;
+    ZDLSourcePortList *sourceList;
+    QCheckBox *showPaths;
+    QCheckBox *launchZDL;
+    QCheckBox *savePaths;
 };

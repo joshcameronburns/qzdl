@@ -20,88 +20,76 @@
 
 #include "ZDLConfiguration.h"
 
-ZDLConfiguration::ZDLConfiguration()
-{
-	//TODO These need to migrate
-	QSettings system(QSettings::IniFormat, QSettings::SystemScope, "Vectec Software", "qZDL", nullptr);
-	QSettings user(QSettings::IniFormat, QSettings::UserScope, "Vectec Software", "qZDL", nullptr);
-	paths[CONF_SYSTEM] = system.fileName();
-	paths[CONF_USER] = user.fileName();
-	paths[CONF_FILE] = "zdl.ini";
-	confs[CONF_SYSTEM] = new ZDLConf();
-	confs[CONF_USER] = new ZDLConf();
-	confs[CONF_FILE] = new ZDLConf();
+ZDLConfiguration::ZDLConfiguration() {
+    //TODO These need to migrate
+    QSettings system(QSettings::IniFormat, QSettings::SystemScope, "Vectec Software", "qZDL", nullptr);
+    QSettings user(QSettings::IniFormat, QSettings::UserScope, "Vectec Software", "qZDL", nullptr);
+    paths[CONF_SYSTEM] = system.fileName();
+    paths[CONF_USER] = user.fileName();
+    paths[CONF_FILE] = "zdl.ini";
+    confs[CONF_SYSTEM] = new ZDLConf();
+    confs[CONF_USER] = new ZDLConf();
+    confs[CONF_FILE] = new ZDLConf();
 }
 
-QString ZDLConfiguration::getPath(ConfScope scope)
-{
-	if (scope >= NUM_CONFS)
-	{
-		return { };
-	}
-	
-	return paths[scope];
+QString ZDLConfiguration::getPath(ConfScope scope) {
+    if (scope >= NUM_CONFS) {
+        return {};
+    }
+
+    return paths[scope];
 }
 
-ZDLConf* ZDLConfiguration::getConf(ConfScope scope)
-{
-	if (scope >= NUM_CONFS)
-	{
-		return nullptr;
-	}
-	
-	return confs[scope];
+ZDLConf *ZDLConfiguration::getConf(ConfScope scope) {
+    if (scope >= NUM_CONFS) {
+        return nullptr;
+    }
+
+    return confs[scope];
 }
 
 QString ZDLConfiguration::getString(
-	[[maybe_unused]] const QString& section,
-	[[maybe_unused]] const QString& key,
-	int* ok,
-	[[maybe_unused]] ConfScope scope,
-	[[maybe_unused]] ScopeRules rules)
-{
-	if (ok)
-	{ *ok = false; }
-	return {};
+        [[maybe_unused]] const QString &section,
+        [[maybe_unused]] const QString &key,
+        int *ok,
+        [[maybe_unused]] ConfScope scope,
+        [[maybe_unused]] ScopeRules rules) {
+    if (ok) { *ok = false; }
+    return {};
 }
 
 int ZDLConfiguration::getInt(
-	[[maybe_unused]] const QString& section,
-	[[maybe_unused]] const QString& key,
-	int* ok,
-	[[maybe_unused]] ConfScope scope,
-	[[maybe_unused]] ScopeRules rules)
-{
-	if (ok)
-	{ *ok = false; }
-	return 0;
+        [[maybe_unused]] const QString &section,
+        [[maybe_unused]] const QString &key,
+        int *ok,
+        [[maybe_unused]] ConfScope scope,
+        [[maybe_unused]] ScopeRules rules) {
+    if (ok) { *ok = false; }
+    return 0;
 }
 
 bool ZDLConfiguration::setString(
-	[[maybe_unused]] const QString& section,
-	[[maybe_unused]] const QString& key,
-	[[maybe_unused]] const QString& value,
-	[[maybe_unused]] ConfScope scope,
-	[[maybe_unused]] ScopeRules rules)
-{
-	return false;
+        [[maybe_unused]] const QString &section,
+        [[maybe_unused]] const QString &key,
+        [[maybe_unused]] const QString &value,
+        [[maybe_unused]] ConfScope scope,
+        [[maybe_unused]] ScopeRules rules) {
+    return false;
 }
 
 bool ZDLConfiguration::setInt(
-	[[maybe_unused]] const QString& section,
-	[[maybe_unused]] const QString& key,
-	[[maybe_unused]] int value,
-	[[maybe_unused]] ConfScope scope,
-	[[maybe_unused]] ScopeRules rules)
-{
-	return false;
+        [[maybe_unused]] const QString &section,
+        [[maybe_unused]] const QString &key,
+        [[maybe_unused]] int value,
+        [[maybe_unused]] ConfScope scope,
+        [[maybe_unused]] ScopeRules rules) {
+    return false;
 }
 
 bool ZDLConfiguration::hasVariable(
-	[[maybe_unused]] const QString& section,
-	[[maybe_unused]] const QString& key,
-	[[maybe_unused]] ConfScope scope,
-	[[maybe_unused]] ScopeRules rules)
-{
-	return false;
+        [[maybe_unused]] const QString &section,
+        [[maybe_unused]] const QString &key,
+        [[maybe_unused]] ConfScope scope,
+        [[maybe_unused]] ScopeRules rules) {
+    return false;
 }

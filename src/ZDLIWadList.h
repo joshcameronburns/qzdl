@@ -21,16 +21,23 @@
 
 #include "ZDLListWidget.h"
 
-class ZDLIWadList : public ZDLListWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLIWadList(ZDLWidget* parent);
-	void addButton() override;
-	void rebuild() override;
-	void newConfig() override;
-	void editButton(QListWidgetItem* item) override;
-	void newDrop(const QStringList& fileList) override;
- protected slots:
-	void wizardAddButton();
+class ZDLIWadList : public ZDLListWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLIWadList(ZDLWidget *parent);
+
+    void addButton() override;
+
+    void rebuild() override;
+
+    void newConfig() override;
+
+    void editButton(QListWidgetItem *item) override;
+
+    void newDrop(const QStringList &fileList) override;
+
+protected slots:
+
+    void wizardAddButton();
 };

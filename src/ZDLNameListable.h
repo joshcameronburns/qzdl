@@ -21,19 +21,27 @@
 #include "ZDLListable.h"
 #include "zdlconf.hpp"
 
-class ZDLNameListable : public ZDLListable
-{
- Q_OBJECT
- public:
-	ZDLNameListable(QListWidget* parent, int type, QString qfile, QString name);
-	~ZDLNameListable() override;
-	virtual QString getFile();
-	QString getName() override;
-	void setDisplayName(QString name);
-	void setFile(QString file);
- protected:
-	QString generateName();
-	QString generateName(ZDLConf* zconf);
-	QString fileName;
-	QString displayName;
+class ZDLNameListable : public ZDLListable {
+Q_OBJECT
+
+public:
+    ZDLNameListable(QListWidget *parent, int type, QString qfile, QString name);
+
+    ~ZDLNameListable() override;
+
+    virtual QString getFile();
+
+    QString getName() override;
+
+    void setDisplayName(QString name);
+
+    void setFile(QString file);
+
+protected:
+    QString generateName();
+
+    QString generateName(ZDLConf *zconf);
+
+    QString fileName;
+    QString displayName;
 };

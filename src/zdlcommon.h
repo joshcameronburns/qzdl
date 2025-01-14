@@ -45,7 +45,7 @@ constexpr auto PROCESS = "64 bit";
 constexpr auto PROCESS = "";
 #endif
 
-extern QDebug* zdlDebug;
+extern QDebug *zdlDebug;
 
 #if defined(ZDL_BLACKBOX)
 #include <QtCore>

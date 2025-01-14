@@ -19,28 +19,32 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QDialog>
 
-class ZDLImportDialog : public QDialog
-{
- Q_OBJECT
- public:
-	enum ImportAction
-	{
-		UNKNOWN, ASKLATER, IMPORTNOW, DONOTIMPORTTHIS, NEVERIMPORT
-	};
-	explicit ZDLImportDialog(QWidget* parent);
-	ImportAction getImportAction()
-	{
-		return importAction;
-	}
- protected:
-	ImportAction importAction;
- protected slots:
-	void askLaterClicked();
-	void importNowClicked();
-	void doNotImportThisClicked();
-	void neverImportClicked();
+class ZDLImportDialog : public QDialog {
+Q_OBJECT
+
+public:
+    enum ImportAction {
+        UNKNOWN, ASKLATER, IMPORTNOW, DONOTIMPORTTHIS, NEVERIMPORT
+    };
+
+    explicit ZDLImportDialog(QWidget *parent);
+
+    ImportAction getImportAction() {
+        return importAction;
+    }
+
+protected:
+    ImportAction importAction;
+protected slots:
+
+    void askLaterClicked();
+
+    void importNowClicked();
+
+    void doNotImportThisClicked();
+
+    void neverImportClicked();
 
 };

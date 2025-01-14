@@ -18,18 +18,19 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
 #include "ZDLFileList.h"
 
-class ZDLFilePane : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLFilePane(QWidget* parent = nullptr);
-	void rebuild() override;
- private:
+class ZDLFilePane : public ZDLWidget {
+Q_OBJECT
 
-	ZDLFileList* fList;
+public:
+    explicit ZDLFilePane(QWidget *parent = nullptr);
+
+    void rebuild() override;
+
+private:
+
+    ZDLFileList *fList;
 };

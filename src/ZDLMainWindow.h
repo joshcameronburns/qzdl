@@ -19,32 +19,43 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
 #include "ZDLWidget.h"
 #include "ZDLInterface.h"
 #include "ZDLSettingsTab.h"
 
-class ZDLMainWindow : public QMainWindow
-{
- Q_OBJECT
- public:
-	explicit ZDLMainWindow(QWidget* parent = nullptr);
-	~ZDLMainWindow() override;
-	void startRead();
-	void writeConfig();
-	static QString getArgumentsString(bool native_sep = false);
-	static QStringList getArgumentsList();
-	static QString getExecutable();
-	void handleImport();
-	static QString getWindowTitle();
- protected:
-	ZDLInterface* intr;
-	ZDLSettingsTab* settings;
-	QAction* qact2;
- public slots:
-	void launch();
-	void quit();
-	void tabChange(int index);
+class ZDLMainWindow : public QMainWindow {
+Q_OBJECT
+
+public:
+    explicit ZDLMainWindow(QWidget *parent = nullptr);
+
+    ~ZDLMainWindow() override;
+
+    void startRead();
+
+    void writeConfig();
+
+    static QString getArgumentsString(bool native_sep = false);
+
+    static QStringList getArgumentsList();
+
+    static QString getExecutable();
+
+    void handleImport();
+
+    static QString getWindowTitle();
+
+protected:
+    ZDLInterface *intr;
+    ZDLSettingsTab *settings;
+    QAction *qact2;
+public slots:
+
+    void launch();
+
+    void quit();
+
+    void tabChange(int index);
 };

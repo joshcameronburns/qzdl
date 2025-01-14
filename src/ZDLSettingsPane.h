@@ -19,7 +19,6 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QListWidget>
 #include <QComboBox>
@@ -27,41 +26,53 @@
 #include <QStyledItemDelegate>
 #include "ZDLWidget.h"
 
-class ZDLSettingsPane : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLSettingsPane(QWidget* parent = nullptr);
-	void rebuild() override;
-	void newConfig() override;
- protected slots:
-	void currentRowChanged(int);
-	void reloadMapList();
-	void VerbosePopup();
-	void HidePopup();
- protected:
-	static QStringList getFilesMaps();
-	QComboBox* diffList;
-	QComboBox* monstersList;
-	QComboBox* sourceList;
-	QListWidget* IWADList;
-	QComboBox* warpCombo;
-	static bool naturalSortLess(const QString& lm, const QString& rm);
+class ZDLSettingsPane : public ZDLWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLSettingsPane(QWidget *parent = nullptr);
+
+    void rebuild() override;
+
+    void newConfig() override;
+
+protected slots:
+
+    void currentRowChanged(int);
+
+    void reloadMapList();
+
+    void VerbosePopup();
+
+    void HidePopup();
+
+protected:
+    static QStringList getFilesMaps();
+
+    QComboBox *diffList;
+    QComboBox *monstersList;
+    QComboBox *sourceList;
+    QListWidget *IWADList;
+    QComboBox *warpCombo;
+
+    static bool naturalSortLess(const QString &lm, const QString &rm);
 };
 
-class AlwaysFocusedDelegate : public QItemDelegate
-{
- Q_OBJECT
- public:
-	explicit AlwaysFocusedDelegate(QObject* parent = nullptr) : QItemDelegate(parent){}
-	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+class AlwaysFocusedDelegate : public QItemDelegate {
+Q_OBJECT
+
+public:
+    explicit AlwaysFocusedDelegate(QObject *parent = nullptr) : QItemDelegate(parent) {}
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
-class DeselectableListWidget : public QListWidget
-{
- Q_OBJECT
- public:
-	explicit DeselectableListWidget(QWidget* parent = nullptr) : QListWidget(parent){}
-	void mousePressEvent(QMouseEvent* event) override;
+class DeselectableListWidget : public QListWidget {
+Q_OBJECT
+
+public:
+    explicit DeselectableListWidget(QWidget *parent = nullptr) : QListWidget(parent) {}
+
+    void mousePressEvent(QMouseEvent *event) override;
 };
 

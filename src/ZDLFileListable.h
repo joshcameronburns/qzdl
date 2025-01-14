@@ -20,12 +20,12 @@
 
 #include "ZDLNameListable.h"
 
-class ZDLFileListable : public ZDLNameListable
-{
- public:
-	ZDLFileListable(QListWidget* parent, int type, const QString& qfile);
-	QString getFile() override;
+class ZDLFileListable : public ZDLNameListable {
+public:
+    ZDLFileListable(QListWidget *parent, int type, const QString &qfile);
 
- private:
-	QString fileName;
+    QString getFile() override;
+
+private:
+    QString fileName;
 };

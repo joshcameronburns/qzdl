@@ -19,7 +19,6 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QDialog>
 #include <QPushButton>
@@ -27,28 +26,38 @@
 #include "ZDLNameListable.h"
 #include "ZDLFileInfo.h"
 
-class ZDLNameInput : public QDialog
-{
- Q_OBJECT
- public:
-	ZDLNameInput(QWidget* parent, QString  last_used_dir, ZDLFileInfo* zdl_fi, bool alllow_dirs, bool allow_params);
-	QString getName();
-	QString getParams();
-	QString getFile();
-	void setFilter(const QString& inFilters);
-	void basedOff(ZDLNameListable* listable);
-	void fromUrl(const QUrl& url);
- public slots:
-	void browse();
-	void okClick();
- protected:
-	ZDLFileInfo* zdl_fi;
-	QString last_used_dir;
-	bool alllow_dirs;
-	int params_offset;
-	QLineEdit* lname;
-	QLineEdit* lparams;
-	QLineEdit* lfile;
-	QString filters;
-	QPushButton* btnBrowse;
+class ZDLNameInput : public QDialog {
+Q_OBJECT
+
+public:
+    ZDLNameInput(QWidget *parent, QString last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs, bool allow_params);
+
+    QString getName();
+
+    QString getParams();
+
+    QString getFile();
+
+    void setFilter(const QString &inFilters);
+
+    void basedOff(ZDLNameListable *listable);
+
+    void fromUrl(const QUrl &url);
+
+public slots:
+
+    void browse();
+
+    void okClick();
+
+protected:
+    ZDLFileInfo *zdl_fi;
+    QString last_used_dir;
+    bool alllow_dirs;
+    int params_offset;
+    QLineEdit *lname;
+    QLineEdit *lparams;
+    QLineEdit *lfile;
+    QString filters;
+    QPushButton *btnBrowse;
 };

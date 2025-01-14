@@ -24,16 +24,21 @@
 #include <QVBoxLayout>
 #include "ZDLWidget.h"
 
-class ZDLQSplitter : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLQSplitter(ZDLWidget* parent);
-	explicit ZDLQSplitter(QWidget* parent);
-	virtual void addChild(QWidget* child);
-	virtual void addChild(ZDLWidget* child);
-	virtual QSplitter* getSplit();
- protected:
-	QSplitter* split;
-	QVBoxLayout* box;
+class ZDLQSplitter : public ZDLWidget {
+Q_OBJECT
+
+public:
+    explicit ZDLQSplitter(ZDLWidget *parent);
+
+    explicit ZDLQSplitter(QWidget *parent);
+
+    virtual void addChild(QWidget *child);
+
+    virtual void addChild(ZDLWidget *child);
+
+    virtual QSplitter *getSplit();
+
+protected:
+    QSplitter *split;
+    QVBoxLayout *box;
 };

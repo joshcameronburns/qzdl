@@ -19,40 +19,53 @@
  */
 #pragma once
 
-#include <QtCore>
- 
+
 #define FLAG_NORMAL   0    // Normal flag
 #define FLAG_VIRTUAL  1    // Does not get read/written, not cloned
 #define FLAG_NOWRITE  2    // Can not write to this value
 #define FLAG_TEMP     4    // Read/write and cloned, but not written
 
-class ZDLLine
-{
-	friend class ZDLVariables;
- public:
-	explicit ZDLLine(const QString& inLine);
-	ZDLLine();
-	~ZDLLine();
-	static int getType();
-	QString getValue();
-	QString getVariable();
-	QString getLine();
-	void setValue(const QString& inValue);
-	ZDLLine* clone();
-	void setIsCopy(bool val);
-	bool setFlags(int flag);
-	[[nodiscard]] int getFlags() const
-	{
-		return flags;
-	}
- private:
-	bool isCopy;
-	void parse();
-	int findComment(char delim);
-	int type;
-	QString line;
-	QString comment;
-	QString value;
-	QString variable;
-	int flags{};
+class ZDLLine {
+    friend class ZDLVariables;
+
+public:
+    explicit ZDLLine(const QString &inLine);
+
+    ZDLLine();
+
+    ~ZDLLine();
+
+    static int getType();
+
+    QString getValue();
+
+    QString getVariable();
+
+    QString getLine();
+
+    void setValue(const QString &inValue);
+
+    ZDLLine *clone();
+
+    void setIsCopy(bool val);
+
+    bool setFlags(int flag);
+
+    [[nodiscard]] int getFlags() const {
+        return flags;
+    }
+
+private:
+    bool isCopy;
+
+    void parse();
+
+    int findComment(char delim);
+
+    int type;
+    QString line;
+    QString comment;
+    QString value;
+    QString variable;
+    int flags{};
 };

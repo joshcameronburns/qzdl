@@ -27,290 +27,241 @@
 #define READUNLOCK() (releaseReadLock(__FILE__,__LINE__))
 #define WRITEUNLOCK() (releaseWriteLock(__FILE__,__LINE__))
 
-ZDLSection::ZDLSection(QString name)
-{
-	reads = 0;
-	writes = 0;
-	sectionName = std::move(name);
-	mutex = LOCK_BUILDER();
-	isCopy = false;
+ZDLSection::ZDLSection(QString name) {
+    reads = 0;
+    writes = 0;
+    sectionName = std::move(name);
+    mutex = LOCK_BUILDER();
+    isCopy = false;
 }
 
-ZDLSection::~ZDLSection()
-{
-	WRITELOCK();
-	while (!lines.empty())
-	{
-		ZDLLine* line = lines.front();
-		lines.pop_front();
-		delete line;
-	}
-	WRITEUNLOCK();
-	delete mutex;
+ZDLSection::~ZDLSection() {
+    WRITELOCK();
+    while (!lines.empty()) {
+        ZDLLine *line = lines.front();
+        lines.pop_front();
+        delete line;
+    }
+    WRITEUNLOCK();
+    delete mutex;
 }
 
-void ZDLSection::setSpecial(int inFlags)
-{
-	flags = inFlags;
+void ZDLSection::setSpecial(int inFlags) {
+    flags = inFlags;
 }
 
-int ZDLSection::hasVariable(const QString& variable)
-{
-	reads++;
-	READLOCK();
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(variable) == 0)
-		{
-			READUNLOCK();
-			return true;
-		}
-	}
-	READUNLOCK();
-	return false;
+int ZDLSection::hasVariable(const QString &variable) {
+    reads++;
+    READLOCK();
+    for (auto line: lines) {
+        if (line->getVariable().compare(variable) == 0) {
+            READUNLOCK();
+            return true;
+        }
+    }
+    READUNLOCK();
+    return false;
 }
 
-void ZDLSection::deleteVariable(const QString& variable)
-{
-	WRITELOCK();
-	reads++;
-	for (int i = 0; i < lines.size(); i++)
-	{
-		ZDLLine* line = lines[i];
-		if (line->getVariable().compare(variable) == 0)
-		{
-			lines.remove(i);
-			delete line;
-			WRITEUNLOCK();
-			return;
-		}
-	}
-	WRITEUNLOCK();
+void ZDLSection::deleteVariable(const QString &variable) {
+    WRITELOCK();
+    reads++;
+    for (int i = 0; i < lines.size(); i++) {
+        ZDLLine *line = lines[i];
+        if (line->getVariable().compare(variable) == 0) {
+            lines.remove(i);
+            delete line;
+            WRITEUNLOCK();
+            return;
+        }
+    }
+    WRITEUNLOCK();
 }
 
-QString ZDLSection::findVariable(const QString& variable)
-{
-	reads++;
-	READLOCK();
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(variable) == 0)
-		{
-			QString val(line->getValue());
-			READUNLOCK();
-			return val;
-		}
-	}
-	READUNLOCK();
-	return { "" };
+QString ZDLSection::findVariable(const QString &variable) {
+    reads++;
+    READLOCK();
+    for (auto line: lines) {
+        if (line->getVariable().compare(variable) == 0) {
+            QString val(line->getValue());
+            READUNLOCK();
+            return val;
+        }
+    }
+    READUNLOCK();
+    return {""};
 }
 
-int ZDLSection::getRegex(const QString& regex, QVector<ZDLLine*>& vctr)
-{
+int ZDLSection::getRegex(const QString &regex, QVector<ZDLLine *> &vctr) {
 #ifdef QT_CORE_LIB
-	QRegularExpression rx(regex);
-	QRegularExpressionMatch match;
-	READLOCK();
+    QRegularExpression rx(regex);
+    QRegularExpressionMatch match;
+    READLOCK();
 
-	for (auto line: lines)
-	{
-		match = rx.match(line->getVariable());
-		if (match.hasMatch())
-		{
-			ZDLLine* copy = line->clone();
-			copy->setIsCopy(true);
-			vctr.push_back(copy);
-		}
-	}
-	READUNLOCK();
-	return (int)vctr.size();
+    for (auto line: lines) {
+        match = rx.match(line->getVariable());
+        if (match.hasMatch()) {
+            ZDLLine *copy = line->clone();
+            copy->setIsCopy(true);
+            vctr.push_back(copy);
+        }
+    }
+    READUNLOCK();
+    return (int) vctr.size();
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-int ZDLSection::setValue(const QString& variable, const QString& value)
-{
-	writes++;
-	WRITELOCK();
+int ZDLSection::setValue(const QString &variable, const QString &value) {
+    writes++;
+    WRITELOCK();
 
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(variable) == 0)
-		{
-			if ((line->getFlags() & FLAG_NOWRITE) == FLAG_NOWRITE)
-			{
-				LOGDATAO() << "Cannot change value of FLAG_NOWRITE" << Qt::endl;
-				return -1;
-			}
-			line->setValue(value);
-			WRITEUNLOCK();
-			return 0;
-		}
-	}
-	//We can't find the line, create a new one.
-	QString buffer = variable;
-	buffer.append("=");
-	buffer.append(value);
-	auto* line = new ZDLLine(buffer);
-	lines.push_back(line);
-	WRITEUNLOCK();
-	return 0;
+    for (auto line: lines) {
+        if (line->getVariable().compare(variable) == 0) {
+            if ((line->getFlags() & FLAG_NOWRITE) == FLAG_NOWRITE) {
+                LOGDATAO() << "Cannot change value of FLAG_NOWRITE" << Qt::endl;
+                return -1;
+            }
+            line->setValue(value);
+            WRITEUNLOCK();
+            return 0;
+        }
+    }
+    //We can't find the line, create a new one.
+    QString buffer = variable;
+    buffer.append("=");
+    buffer.append(value);
+    auto *line = new ZDLLine(buffer);
+    lines.push_back(line);
+    WRITEUNLOCK();
+    return 0;
 }
 
-int ZDLSection::streamWrite(QIODevice* stream)
-{
+int ZDLSection::streamWrite(QIODevice *stream) {
 
 #if defined(_WIN32)
-	QString el("\r\n");
+    QString el("\r\n");
 #define ENDOFLINE el
 #else
-	QString el("\n");
+    QString el("\n");
 #define ENDOFLINE el
 #endif
-	READLOCK();
-	QTextStream tstream(stream);
-	//Write only if we have stuff to write
-	if (!lines.empty())
-	{
-		writes++;
-		//Global's don't have a section name
-		if (sectionName.length() > 0)
-		{
-			tstream << "[" << sectionName << "]" << ENDOFLINE;
-		}
-		for (auto line: lines)
-		{
-			if ((line->getFlags() & FLAG_VIRTUAL) == 0 && (line->getFlags() & FLAG_TEMP) == 0)
-			{
-				tstream << line->getLine() << ENDOFLINE;
-			}
-			else
-			{
-				LOGDATAO() << "Ignoring FLAG_VIRTUAL and FLAG_TEMP entries" << Qt::endl;
-			}
-		}
-		tstream << ENDOFLINE;
-	}
-	READUNLOCK();
-	return 0;
+    READLOCK();
+    QTextStream tstream(stream);
+    //Write only if we have stuff to write
+    if (!lines.empty()) {
+        writes++;
+        //Global's don't have a section name
+        if (sectionName.length() > 0) {
+            tstream << "[" << sectionName << "]" << ENDOFLINE;
+        }
+        for (auto line: lines) {
+            if ((line->getFlags() & FLAG_VIRTUAL) == 0 && (line->getFlags() & FLAG_TEMP) == 0) {
+                tstream << line->getLine() << ENDOFLINE;
+            } else {
+                LOGDATAO() << "Ignoring FLAG_VIRTUAL and FLAG_TEMP entries" << Qt::endl;
+            }
+        }
+        tstream << ENDOFLINE;
+    }
+    READUNLOCK();
+    return 0;
 }
 
-QString ZDLSection::getName()
-{
-	reads++;
-	return sectionName;
+QString ZDLSection::getName() {
+    reads++;
+    return sectionName;
 }
 
-ZDLLine* ZDLSection::findLine(const QString& inVar)
-{
-	READLOCK();
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(inVar) == 0)
-		{
-			qDebug() << "UNSAFE OPERATION AT " << __FILE__ << ":" << __LINE__ << Qt::endl;
-			READUNLOCK();
-			return line;
-		}
-	}
-	READUNLOCK();
+ZDLLine *ZDLSection::findLine(const QString &inVar) {
+    READLOCK();
+    for (auto line: lines) {
+        if (line->getVariable().compare(inVar) == 0) {
+            qDebug() << "UNSAFE OPERATION AT " << __FILE__ << ":" << __LINE__ << Qt::endl;
+            READUNLOCK();
+            return line;
+        }
+    }
+    READUNLOCK();
 
-	return nullptr;
+    return nullptr;
 }
 
-int ZDLSection::addLine(const QString& linedata)
-{
-	if (linedata.isEmpty()) return 0;
+int ZDLSection::addLine(const QString &linedata) {
+    if (linedata.isEmpty()) return 0;
 
-	writes++;
-	auto* newl = new ZDLLine(linedata);
-	WRITELOCK();
-	ZDLLine* ptr = findLine(newl->getVariable());
-	
-	if (ptr == nullptr)
-	{
-		lines.push_back(newl);
-		WRITEUNLOCK();
-		return 0;
-	}
-	else
-	{
-		ptr->setValue(newl->getValue());
-		delete newl;
-		WRITEUNLOCK();
-		return 1;
-	}
+    writes++;
+    auto *newl = new ZDLLine(linedata);
+    WRITELOCK();
+    ZDLLine *ptr = findLine(newl->getVariable());
+
+    if (ptr == nullptr) {
+        lines.push_back(newl);
+        WRITEUNLOCK();
+        return 0;
+    } else {
+        ptr->setValue(newl->getValue());
+        delete newl;
+        WRITEUNLOCK();
+        return 1;
+    }
 }
 
-ZDLSection* ZDLSection::clone()
-{
-	READLOCK();
-	auto* copy = new ZDLSection(sectionName);
-	for (auto& line: lines)
-	{
-		/* Virtual flags do not get cloned */
-		if ((line->getFlags() & FLAG_VIRTUAL) == 0)
-		{
-			copy->addLine(line->clone());
-		}
-		else
-		{
-			LOGDATAO() << "Ignoring clone request for virtual flags" << Qt::endl;
-		}
-	}
-	READUNLOCK();
-	return copy;
+ZDLSection *ZDLSection::clone() {
+    READLOCK();
+    auto *copy = new ZDLSection(sectionName);
+    for (auto &line: lines) {
+        /* Virtual flags do not get cloned */
+        if ((line->getFlags() & FLAG_VIRTUAL) == 0) {
+            copy->addLine(line->clone());
+        } else {
+            LOGDATAO() << "Ignoring clone request for virtual flags" << Qt::endl;
+        }
+    }
+    READUNLOCK();
+    return copy;
 }
 
-int ZDLSection::getFlagsForValue(const QString& var)
-{
-	READLOCK();
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(var) == 0)
-		{
-			return line->getFlags();
-		}
-	}
-	READUNLOCK();
-	return -1;
+int ZDLSection::getFlagsForValue(const QString &var) {
+    READLOCK();
+    for (auto line: lines) {
+        if (line->getVariable().compare(var) == 0) {
+            return line->getFlags();
+        }
+    }
+    READUNLOCK();
+    return -1;
 }
 
-bool ZDLSection::setFlagsForValue(const QString& var, int value)
-{
-	READLOCK();
-	for (auto line: lines)
-	{
-		if (line->getVariable().compare(var) == 0)
-		{
-			return line->setFlags(value);
-		}
-	}
-	READUNLOCK();
-	return false;
+bool ZDLSection::setFlagsForValue(const QString &var, int value) {
+    READLOCK();
+    for (auto line: lines) {
+        if (line->getVariable().compare(var) == 0) {
+            return line->setFlags(value);
+        }
+    }
+    READUNLOCK();
+    return false;
 }
 
-bool ZDLSection::deleteRegex(const QString& regex)
-{
-	bool rc = false;
-	WRITELOCK();
-	QRegularExpression rx(regex);
-	QRegularExpressionMatch match;
+bool ZDLSection::deleteRegex(const QString &regex) {
+    bool rc = false;
+    WRITELOCK();
+    QRegularExpression rx(regex);
+    QRegularExpressionMatch match;
 
-	for (int i = 0; i < lines.size(); i++)
-	{
-		ZDLLine* line = lines[i];
-		match = rx.match(line->getVariable());
+    for (int i = 0; i < lines.size(); i++) {
+        ZDLLine *line = lines[i];
+        match = rx.match(line->getVariable());
 
-		if (match.hasMatch())
-		{
-			lines.remove(i--);
-			rc = true;
-			delete line;
-		}
-	}
+        if (match.hasMatch()) {
+            lines.remove(i--);
+            rc = true;
+            delete line;
+        }
+    }
 
-	WRITEUNLOCK();
-	return rc;
+    WRITEUNLOCK();
+    return rc;
 }

@@ -19,7 +19,6 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QVBoxLayout>
 #include <QLineEdit>
@@ -27,43 +26,69 @@
 #include "ZDLWidget.h"
 #include "ZDLMultiPane.h"
 
-class ZDLInterface : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLInterface(QWidget* parent = 0);
-	void startRead();
-	void writeConfig();
-	void newConfig() override;
-	void rebuild() override;
- public slots:
-	void loadZdlFile();
-	void saveZdlFile();
- private slots:
-	void sendSignals();
-	void mclick();
-	static void launch();
-	void saveConfigFile();
-	void loadConfigFile();
-	void aboutClick();
-	void showCommandline();
-	static void exitzdl();
-	static void clearAllFields();
-	static void clearAllPWads();
-	void clearEverything();
-	void importCurrentConfig();
- private:
-	QLayout* getBottomPane();
-	QLayout* getButtonPane();
-	QLayout* getTopPane();
-	void buttonPaneNewConfig();
-	void bottomPaneRebuild();
-	void bottomPaneNewConfig();
+class ZDLInterface : public ZDLWidget {
+Q_OBJECT
 
-	QPushButton* btnEpr{};
-	QPushButton* btnZDL{};
-	QPushButton* btnLaunch{};
-	QVBoxLayout* box;
-	ZDLMultiPane* mpane;
-	QLineEdit* extraArgs{};
+public:
+    explicit ZDLInterface(QWidget *parent = 0);
+
+    void startRead();
+
+    void writeConfig();
+
+    void newConfig() override;
+
+    void rebuild() override;
+
+public slots:
+
+    void loadZdlFile();
+
+    void saveZdlFile();
+
+private slots:
+
+    void sendSignals();
+
+    void mclick();
+
+    static void launch();
+
+    void saveConfigFile();
+
+    void loadConfigFile();
+
+    void aboutClick();
+
+    void showCommandline();
+
+    static void exitzdl();
+
+    static void clearAllFields();
+
+    static void clearAllPWads();
+
+    void clearEverything();
+
+    void importCurrentConfig();
+
+private:
+    QLayout *getBottomPane();
+
+    QLayout *getButtonPane();
+
+    QLayout *getTopPane();
+
+    void buttonPaneNewConfig();
+
+    void bottomPaneRebuild();
+
+    void bottomPaneNewConfig();
+
+    QPushButton *btnEpr{};
+    QPushButton *btnZDL{};
+    QPushButton *btnLaunch{};
+    QVBoxLayout *box;
+    ZDLMultiPane *mpane;
+    QLineEdit *extraArgs{};
 };

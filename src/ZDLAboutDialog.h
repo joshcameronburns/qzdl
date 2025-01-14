@@ -18,16 +18,17 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QDialog>
 #include "ZDLWidget.h"
 
-class ZDLAboutDialog : public QDialog
-{
- Q_OBJECT
- public:
-	explicit ZDLAboutDialog(ZDLWidget* parent = nullptr);
- protected slots:
-	void close();
+class ZDLAboutDialog : public QDialog {
+Q_OBJECT
+
+public:
+    explicit ZDLAboutDialog(ZDLWidget *parent = nullptr);
+
+protected slots:
+
+    void close();
 };

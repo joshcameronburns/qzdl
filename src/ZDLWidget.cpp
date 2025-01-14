@@ -18,81 +18,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtGui>
 #include <QApplication>
 #include "ZDLWidget.h"
 
-ZDLWidget::ZDLWidget(ZDLWidget* parent) : QWidget(parent)
-{
-	setZParent(parent);
-	setContentsMargins(0, 0, 0, 0);
+ZDLWidget::ZDLWidget(ZDLWidget *parent) : QWidget(parent) {
+    setZParent(parent);
+    setContentsMargins(0, 0, 0, 0);
 }
 
-void ZDLWidget::setZParent(ZDLWidget* parent)
-{
-	zparent = parent;
-	connect(parent, SIGNAL(buildChildren(ZDLWidget * )), this, SLOT(notifyFromParent(ZDLWidget * )));
-	connect(this, SIGNAL(buildParent(ZDLWidget * )), parent, SLOT(notifyFromChild(ZDLWidget * )));
-	connect(parent, SIGNAL(readChildren(ZDLWidget * )), this, SLOT(readFromParent(ZDLWidget * )));
-	connect(this, SIGNAL(readParent(ZDLWidget * )), parent, SLOT(readFromChild(ZDLWidget * )));
+void ZDLWidget::setZParent(ZDLWidget *parent) {
+    zparent = parent;
+    connect(parent, SIGNAL(buildChildren(ZDLWidget * )), this, SLOT(notifyFromParent(ZDLWidget * )));
+    connect(this, SIGNAL(buildParent(ZDLWidget * )), parent, SLOT(notifyFromChild(ZDLWidget * )));
+    connect(parent, SIGNAL(readChildren(ZDLWidget * )), this, SLOT(readFromParent(ZDLWidget * )));
+    connect(this, SIGNAL(readParent(ZDLWidget * )), parent, SLOT(readFromChild(ZDLWidget * )));
 }
 
-ZDLWidget::ZDLWidget()
-{
-	setContentsMargins(0, 0, 0, 0);
-	zparent = nullptr;
+ZDLWidget::ZDLWidget() {
+    setContentsMargins(0, 0, 0, 0);
+    zparent = nullptr;
 }
 
-ZDLWidget::ZDLWidget(QWidget* parent) : QWidget(parent)
-{
-	setContentsMargins(0, 0, 0, 0);
-	zparent = nullptr;
+ZDLWidget::ZDLWidget(QWidget *parent) : QWidget(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    zparent = nullptr;
 }
 
-void ZDLWidget::notifyFromChild(ZDLWidget* origin)
-{
-	if (origin != this)
-	{
-		emit buildChildren(origin);
-		emit buildParent(origin);
-		rebuild();
-	}
+void ZDLWidget::notifyFromChild(ZDLWidget *origin) {
+    if (origin != this) {
+        emit buildChildren(origin);
+        emit buildParent(origin);
+        rebuild();
+    }
 }
 
-void ZDLWidget::notifyFromParent(ZDLWidget* origin)
-{
-	if (origin != this)
-	{
-		emit buildChildren(origin);
-		rebuild();
-	}
+void ZDLWidget::notifyFromParent(ZDLWidget *origin) {
+    if (origin != this) {
+        emit buildChildren(origin);
+        rebuild();
+    }
 }
 
-void ZDLWidget::readFromChild(ZDLWidget* origin)
-{
-	if (origin != this)
-	{
-		emit readChildren(origin);
-		emit readParent(origin);
-		newConfig();
-	}
+void ZDLWidget::readFromChild(ZDLWidget *origin) {
+    if (origin != this) {
+        emit readChildren(origin);
+        emit readParent(origin);
+        newConfig();
+    }
 }
 
-void ZDLWidget::readFromParent(ZDLWidget* origin)
-{
-	if (origin != this)
-	{
-		emit readChildren(origin);
-		newConfig();
-	}
+void ZDLWidget::readFromParent(ZDLWidget *origin) {
+    if (origin != this) {
+        emit readChildren(origin);
+        newConfig();
+    }
 }
 
-void ZDLWidget::rebuild()
-{
+void ZDLWidget::rebuild() {
 }
 
-void ZDLWidget::newConfig()
-{
+void ZDLWidget::newConfig() {
 }
 
 

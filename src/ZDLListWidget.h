@@ -19,43 +19,59 @@
  */
 #pragma once
 
-#include <QtGui>
 #include <QObject>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
 
-class ZDLListWidget : public ZDLWidget
-{
- Q_OBJECT
- public:
-	explicit ZDLListWidget(ZDLWidget* parent);
-	virtual void insert(ZDLListable* item, int index);
-	virtual int count();
-	virtual void remove(int index);
-	virtual ZDLListable* get(int index);
-	void doDragDrop(int enabled);
-	virtual void newDrop(const QStringList& fileList);
- protected slots:
-	virtual void addButton();
-	virtual void removeButton();
-	virtual void upButton();
-	virtual void downButton();
-	virtual void editButton();
-	virtual void editButton(QListWidgetItem* item);
- protected:
-	void dragEnterEvent(QDragEnterEvent* event) override;
-	void dragMoveEvent(QDragMoveEvent* event) override;
-	void dragLeaveEvent(QDragLeaveEvent* event) override;
-	void dropEvent(QDropEvent* event) override;
+class ZDLListWidget : public ZDLWidget {
+Q_OBJECT
 
-	QHBoxLayout* buttonRow;
-	QPushButton* btnAdd;
-	QPushButton* btnRem;
-	QPushButton* btnEdt;
-	QPushButton* btnUp;
-	QPushButton* btnDn;
-	QListWidget* pList;
-	QList<ZDLListable*> list;
+public:
+    explicit ZDLListWidget(ZDLWidget *parent);
+
+    virtual void insert(ZDLListable *item, int index);
+
+    virtual int count();
+
+    virtual void remove(int index);
+
+    virtual ZDLListable *get(int index);
+
+    void doDragDrop(int enabled);
+
+    virtual void newDrop(const QStringList &fileList);
+
+protected slots:
+
+    virtual void addButton();
+
+    virtual void removeButton();
+
+    virtual void upButton();
+
+    virtual void downButton();
+
+    virtual void editButton();
+
+    virtual void editButton(QListWidgetItem *item);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+
+    void dragMoveEvent(QDragMoveEvent *event) override;
+
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+
+    void dropEvent(QDropEvent *event) override;
+
+    QHBoxLayout *buttonRow;
+    QPushButton *btnAdd;
+    QPushButton *btnRem;
+    QPushButton *btnEdt;
+    QPushButton *btnUp;
+    QPushButton *btnDn;
+    QListWidget *pList;
+    QList<ZDLListable *> list;
 };
